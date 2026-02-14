@@ -21,11 +21,9 @@ body {
   box-sizing: content-box;
   align-items: center;
   width: 90vw;
-  max-width: 330px;
-  min-width: 330px;
+  min-width: 630px;
   height: 90vh;
-  max-height: 550px;
-  min-height: 550px;
+  min-height: 850px;
   background: rgba(255, 255, 255, 0.3);
   border-radius: 20px;
   padding: 10px 20px;
@@ -75,28 +73,7 @@ body {
   );
 }
 
-.ticket:nth-child(1) {
-  left: 0;
-  right: 0;
-  margin-left: auto;
-  margin-right: auto;
-  z-index: 3;
-  position: unset;
-}
-.ticket:nth-child(2) {
-  rotate: -3deg;
-  left: 8px;
-  z-index: 2;
-  opacity: 0.8;
-}
-.ticket:nth-child(3) {
-  rotate: 2deg;
-  left: 3px;
-  z-index: 1;
-  opacity: 0.5;
-}
-
-.ticket:nth-child(1):hover {
+.ticket:hover {
   transform: translateY(-10px);
   transition: transform 0.3s ease;
 }
@@ -269,8 +246,8 @@ p#tap-directions {
   position: relative;
   width: 100%;
   height: 90vh;
-  min-height:400px;
-  min-width:400px;
+  min-height:700px;
+  min-width:550px;
 }
 
 #storyset-link {
