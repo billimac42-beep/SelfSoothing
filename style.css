@@ -21,11 +21,11 @@ body {
   box-sizing: content-box;
   align-items: center;
   width: 90vw;
-  max-width: 230px;
-  min-width: 220px;
+  max-width: 330px;
+  min-width: 330px;
   height: 90vh;
-  max-height: 450px;
-  min-height: 450px;
+  max-height: 550px;
+  min-height: 550px;
   background: rgba(255, 255, 255, 0.3);
   border-radius: 20px;
   padding: 10px 20px;
