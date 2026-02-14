@@ -4,6 +4,7 @@ body {
   background: radial-gradient(circle at top right, #8c7fad, #212a4b) center /
     cover no-repeat fixed;
   min-height: 100vh;
+  min-width:100vw;
   align-items: center;
   justify-self: center;
 }
@@ -268,7 +269,8 @@ p#tap-directions {
   position: relative;
   width: 100%;
   height: 90vh;
-  min-height:300px;
+  min-height:400px;
+  min-width:400px;
 }
 
 #storyset-link {
