@@ -1,0 +1,271 @@
+body {
+  margin: 0;
+  /* Syntax: [image] [position] / [size] [repeat] [attachment] */
+  background: radial-gradient(circle at top right, #8c7fad, #212a4b) center /
+    cover no-repeat fixed;
+  min-height: 100vh;
+  align-items: center;
+  justify-self: center;
+}
+
+/*===========================================
++ Ticket Body Start
+===========================================*/
+.ticket {
+  /* 1. The Glass Base */
+  container-type: inline-size;
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  box-sizing: content-box;
+  align-items: center;
+  width: 90vw;
+  max-width: 230px;
+  min-width: 220px;
+  height: 90vh;
+  max-height: 450px;
+  min-height: 450px;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 20px;
+  padding: 10px 20px;
+  backdrop-filter: blur(10px) brightness(1.2) saturate(150%);
+  -webkit-backdrop-filter: blur(10px) brightness(1.2) saturate(150%);
+  border: 1px solid rgba(163, 156, 192, 0.3);
+  transform-origin: bottom center;
+  transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+
+  /* 2. The Dimensional Shadows */
+  box-shadow: 
+    /* Soft white inner glow concentrated at the top-right */ inset -10px
+      10px 25px rgba(214, 202, 226, 0.4),
+    /* Subtle outer glow that spills onto the background */ 2px -2px 32px rgba(197, 168, 202, 0.3),
+    -28px 28px 22px rgba(49, 51, 93, 0.5);
+  overflow: hidden;
+}
+
+/*Glass Refrraction Layer*/
+.ticket::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  /* Adds a subtle secondary blur layer for depth */
+  backdrop-filter: blur(2px);
+  /* A sharp highlight on the top-right edge */
+  box-shadow: inset -2px 2px 0px rgba(255, 255, 255, 0.5);
+  pointer-events: none;
+}
+
+/*Pink Gradient Background*/
+.ticket:before {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 100%;
+  width: 100%;
+  background: radial-gradient(
+    circle at top right,
+    rgba(247, 211, 170, 0.3) 0%,
+    /* Pink at the corner */ rgba(223, 179, 197, 0.4) 30%,
+    /* Purple transition */ rgba(187, 163, 207, 0.4) 50%,
+    rgba(130, 137, 191, 0.5) 100%,
+    transparent 70%
+  );
+}
+
+.ticket:nth-child(1) {
+  left: 0;
+  right: 0;
+  margin-left: auto;
+  margin-right: auto;
+  z-index: 3;
+  position: unset;
+}
+.ticket:nth-child(2) {
+  rotate: -3deg;
+  left: 8px;
+  z-index: 2;
+  opacity: 0.8;
+}
+.ticket:nth-child(3) {
+  rotate: 2deg;
+  left: 3px;
+  z-index: 1;
+  opacity: 0.5;
+}
+
+.ticket:nth-child(1):hover {
+  transform: translateY(-10px);
+  transition: transform 0.3s ease;
+}
+
+/*===========================================
+- Ticket Body End
+===========================================*/
+
+/*===========================================
++ Ticket Content DIV Start
+===========================================*/
+#content {
+  display: flex;
+  z-index: 1;
+}
+/*===========================================
+- Ticket Content DIV End
+===========================================*/
+
+/*===========================================
++ Body Text Start
+===========================================*/
+/*Goodness Buggins Header*/
+.body-text.goodness {
+  padding: 0 5px;
+  font-family: "Bebas Neue", sans-serif;
+  opacity: 0.5;
+  font-size: 17px;
+  font-weight: 500;
+  letter-spacing: 0.3em;
+  top: 0;
+  /* Make text semi-transparent to blend with the glass background */
+  color: rgba(255, 255, 255, 0.3);
+
+  /* 2. Top-Right Embossed Lighting */
+  text-shadow: 
+    /* Highlight: Top-Right (Negative X, Positive Y) */ 1px -1px 1px
+      rgba(255, 255, 255, 0.2),
+    /* Shadow: Bottom-Left (Positive X, Negative Y) */ -1px 1px 1px rgba(44, 57, 99, 0.5);
+}
+
+/*Blue Affirmation Text*/
+.body-text {
+  font-family: "Quicksand", sans-serif;
+  font-optical-sizing: auto;
+  font-size: 24px;
+  font-weight: 400;
+  line-height: 1.2;
+  text-align: center;
+  color: #fff;
+  opacity: 0.7;
+  display: inline-block;
+  white-space: normal;
+  padding: 35px 10px 0 10px;
+  z-index: 3;
+}
+/*===========================================
+- Body Text End
+===========================================*/
+
+/*===========================================
++ SVG Start
+===========================================*/
+/*Applies to All SVGs*/
+svg.animated {
+  position: absolute;
+  /* bottom: 10%;*/
+  bottom: 1%;
+  opacity: 0.8;
+  z-index: 1;
+}
+
+/*Individual SVG Adjustments*/
+svg.animated#freepik_stories-otters-swimming {
+  bottom: -3%;
+}
+svg#freepik_stories-net-zero {
+  bottom: 10%;
+}
+svg#freepik_stories-mother-earth-day {
+  height: 90%;
+  bottom: -10%;
+}
+svg#freepik_stories-chakras {
+  height: 85%;
+  bottom: -13%;
+}
+svg#freepik_stories-underwater-selfie {
+  height: 95%;
+  bottom: -15%;
+  left: -50%;
+}
+svg#freepik_stories-choice {
+  height: 83%;
+  bottom: -14%;
+}
+svg#freepik_stories-buddha-hand {
+  height: 94%;
+  bottom: -12%;
+}
+svg#freepik_stories-breathing-exercise {
+  height: 100%;
+  bottom: -15%;
+}
+svg#freepik_stories-bipolar-disorder {
+  height: 100%;
+  bottom: -16%;
+}
+svg#freepik_stories-personal-growth {
+  max-height: 56%;
+  bottom: 7%;
+}
+
+svg#freepik_stories-meditation {
+  height: 110%;
+  bottom: -15%;
+}
+svg#freepik_stories-campfire {
+  height: 100%;
+  bottom: -15%;
+}
+svg#freepik_stories-fireflies {
+  height: 90%;
+  bottom: -14%;
+}
+svg#freepik_stories-flying-phoenix {
+  height: 100%;
+  bottom: -20%;
+}
+svg#freepik_stories-breaking-barriers {
+  height: 100%;
+  bottom: -16%;
+  left: -53%;
+}
+svg#freepik_stories-self-confidence {
+  height: 98%;
+  bottom: -19%;
+}
+/*===========================================
+- SVG End
+===========================================*/
+
+/*===========================================
++ Tap Directions Start
+===========================================*/
+/*DIV Holding Tap Directions P*/
+div#tap-directions-holder {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+}
+
+/*Tap Directions P*/
+p#tap-directions {
+  font-family: "Roboto", sans-serif;
+  font-weight: 300;
+  font-size: 14px;
+  color: #b9b3dd;
+  text-align: center;
+}
+/*===========================================
+- Tap Directions End
+===========================================*/
+#ticket-stack {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  width: 100%;
+  height: 88vh;
+}
