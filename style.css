@@ -21,9 +21,7 @@ body {
   box-sizing: content-box;
   align-items: center;
   width: 90vw;
-  min-width: 630px;
   height: 90vh;
-  min-height: 850px;
   background: rgba(255, 255, 255, 0.3);
   border-radius: 20px;
   padding: 10px 20px;
@@ -244,10 +242,8 @@ p#tap-directions {
   justify-content: center;
   align-items: center;
   position: relative;
-  width: 100%;
+  width: 100vw;
   height: 90vh;
-  min-height:700px;
-  min-width:550px;
 }
 
 #storyset-link {
