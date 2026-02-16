@@ -1,61 +1,71 @@
 body {
+  display: initial;
   margin: 0;
+  padding: 2% auto;
   /* Syntax: [image] [position] / [size] [repeat] [attachment] */
   background: radial-gradient(circle at top right, #8c7fad, #212a4b) center /
     cover no-repeat fixed;
   min-height: 100vh;
-  min-width:100vw;
   align-items: center;
   justify-self: center;
+  justify-items: center;
 }
-
 /*===========================================
-+ Ticket Body Start
++ Card Stack Container Start
 ===========================================*/
-.ticket {
-  /* 1. The Glass Base */
-  container-type: inline-size;
-  position: absolute;
+#card-stack {
   display: flex;
   flex-direction: column;
-  box-sizing: content-box;
+  justify-content: center;
   align-items: center;
-  width: 80vw;
-  height: 70vh;
-  margin-top: 2%;
-  background: rgba(255, 255, 255, 0.3);
-  border-radius: 20px;
+  position: relative;
+  width: 100vw;
+  height: 842px;
+  margin: 2% auto;
+}
+/*===========================================
+- Card Stack Container End
+===========================================*/
+
+/*===========================================
++ Card Body Start
+===========================================*/
+.card {
+  container-type: inline-size;
+  box-sizing: content-box;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  margin-left: auto;
+  margin-right: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 383px;
+  height: 832px;
   padding: 10px 20px;
-  backdrop-filter: blur(10px) brightness(1.2) saturate(150%);
-  -webkit-backdrop-filter: blur(10px) brightness(1.2) saturate(150%);
+  overflow: hidden; /*Required for the pink gradient :before*/
+
+  /* 1. The Glass Base */
+  border-radius: 20px;
   border: 1px solid rgba(163, 156, 192, 0.3);
+  background: rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(10px) brightness(1.2) saturate(150%);
+  -webkit-backdrop-filter: blur(10px) brightness(1.2) saturate(150%); /*Safari compatibility*/
   transform-origin: bottom center;
-  transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); /*Hover transition*/
 
   /* 2. The Dimensional Shadows */
   box-shadow: 
     /* Soft white inner glow concentrated at the top-right */ inset -10px
       10px 25px rgba(214, 202, 226, 0.4),
     /* Subtle outer glow that spills onto the background */ 2px -2px 32px rgba(197, 168, 202, 0.3),
-    -28px 28px 22px rgba(49, 51, 93, 0.5);
-  overflow: hidden;
-}
-
-/*Glass Refrraction Layer*/
-.ticket::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  /* Adds a subtle secondary blur layer for depth */
-  backdrop-filter: blur(2px);
-  /* A sharp highlight on the top-right edge */
-  box-shadow: inset -2px 2px 0px rgba(255, 255, 255, 0.5);
-  pointer-events: none;
+    /* Dark card outer shadow */ -28px 28px 22px rgba(49, 51, 93, 0.5);
 }
 
 /*Pink Gradient Background*/
-.ticket:before {
+.card:before {
   content: "";
   position: absolute;
   top: 0;
@@ -72,24 +82,58 @@ body {
   );
 }
 
-.ticket:hover {
+/*Glass Refrraction Layer*/
+.card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  /* Adds a subtle secondary blur layer for depth */
+  backdrop-filter: blur(2px);
+  /* A sharp highlight on the top-right edge */
+  box-shadow: inset -2px 2px 0px rgba(255, 255, 255, 0.5);
+  pointer-events: none;
+}
+
+.card:nth-child(1) {
+  /*left: 0;
+  right: 0;*/
+  margin-left: auto;
+  margin-right: auto;
+  z-index: 3;
+  /* position: unset;*/
+}
+.card:nth-child(2) {
+  rotate: -3deg;
+  /* left: 8px;*/
+  z-index: 2;
+  opacity: 0.8;
+}
+.card:nth-child(3) {
+  rotate: 2deg;
+  /*  left: 3px;*/
+  z-index: 1;
+  opacity: 0.5;
+}
+
+.card:nth-child(1):hover {
   transform: translateY(-10px);
   transition: transform 0.3s ease;
 }
 
 /*===========================================
-- Ticket Body End
+- Card Body End
 ===========================================*/
 
 /*===========================================
-+ Ticket Content DIV Start
++ Card Content DIV Start
 ===========================================*/
 #content {
-  display: flex;
-  z-index: 1;
+  /*display: flex;
+  z-index: 1;*/
 }
 /*===========================================
-- Ticket Content DIV End
+- Card Content DIV End
 ===========================================*/
 
 /*===========================================
@@ -97,15 +141,15 @@ body {
 ===========================================*/
 /*Goodness Buggins Header*/
 .body-text.goodness {
-  padding: 5px;
+  padding: 8px;
   font-family: "Bebas Neue", sans-serif;
   opacity: 0.5;
-  font-size: 42px;
+  font-size: 24px;
   font-weight: 500;
   letter-spacing: 0.3em;
-  top: 0;
   /* Make text semi-transparent to blend with the glass background */
-  color: rgba(255, 255, 255, 0.3);
+  color: rgba(255, 255, 255, 0.5);
+  background: transparent;
 
   /* 2. Top-Right Embossed Lighting */
   text-shadow: 
@@ -118,15 +162,17 @@ body {
 .body-text {
   font-family: "Quicksand", sans-serif;
   font-optical-sizing: auto;
-  font-size: 84px;
+  font-size: 40px;
   font-weight: 400;
   line-height: 1.2;
   text-align: center;
   color: #fff;
-  opacity: 0.7;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px); /*Safari compatibility*/
+  opacity: 0.8;
   display: inline-block;
   white-space: normal;
-  padding: 35px 10px 0 10px;
+  padding: 40px 10px 0 10px;
   z-index: 3;
 }
 /*===========================================
@@ -154,16 +200,16 @@ svg#freepik_stories-net-zero {
 }
 svg#freepik_stories-mother-earth-day {
   height: 90%;
-  bottom: -10%;
+  bottom: -11%;
 }
 svg#freepik_stories-chakras {
-  height: 85%;
+  height: 80%;
   bottom: -13%;
 }
 svg#freepik_stories-underwater-selfie {
   height: 95%;
   bottom: -15%;
-  left: -50%;
+  left: -70%;
 }
 svg#freepik_stories-choice {
   height: 83%;
@@ -171,11 +217,11 @@ svg#freepik_stories-choice {
 }
 svg#freepik_stories-buddha-hand {
   height: 94%;
-  bottom: -12%;
+  bottom: -11%;
 }
 svg#freepik_stories-breathing-exercise {
-  height: 100%;
-  bottom: -15%;
+  height: 70%;
+  bottom: -11%;
 }
 svg#freepik_stories-bipolar-disorder {
   height: 100%;
@@ -185,10 +231,9 @@ svg#freepik_stories-personal-growth {
   max-height: 56%;
   bottom: 7%;
 }
-
 svg#freepik_stories-meditation {
   height: 110%;
-  bottom: -15%;
+  bottom: -17%;
 }
 svg#freepik_stories-campfire {
   height: 100%;
@@ -196,11 +241,11 @@ svg#freepik_stories-campfire {
 }
 svg#freepik_stories-fireflies {
   height: 90%;
-  bottom: -14%;
+  bottom: -13%;
 }
 svg#freepik_stories-flying-phoenix {
   height: 100%;
-  bottom: -20%;
+  bottom: -24%;
 }
 svg#freepik_stories-breaking-barriers {
   height: 100%;
@@ -208,8 +253,8 @@ svg#freepik_stories-breaking-barriers {
   left: -53%;
 }
 svg#freepik_stories-self-confidence {
-  height: 98%;
-  bottom: -19%;
+  height: 90%;
+  bottom: -17%;
 }
 /*===========================================
 - SVG End
@@ -225,35 +270,32 @@ div#tap-directions-holder {
   width: 100%;
   justify-content: center;
   align-items: center;
+  padding: 8px 0;
 }
 
 /*Tap Directions P*/
 p#tap-directions {
   font-family: "Roboto", sans-serif;
   font-weight: 300;
-  font-size: 28px;
+  font-size: 16px;
   color: #b9b3dd;
   text-align: center;
+  padding: 16px;
 }
 /*===========================================
 - Tap Directions End
 ===========================================*/
-#ticket-stack {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: relative;
-  width: 80vw;
-  height: 70vh;
-  margin-top: 4%;
-  margin-bottom:24px;
-  margin-left: auto;
-    margin-right: auto;
-}
 
+/*===========================================
++ StorySet Link Start
+===========================================*/
 #storyset-link {
-  font-family:"Roboto", sans-serif;
-  font-size:20px;
-  color:#fff;
-  text-underline-offset:0.3em;
+  font-family: "Roboto", sans-serif;
+  font-size: 12px;
+  color: #fff;
+  text-underline-offset: 0.3em;
+  padding-bottom: 16px;
 }
+/*===========================================
+- StorySet Link End
+===========================================*/
