@@ -1,7 +1,8 @@
 body {
   display: initial;
   margin: 0;
-  padding: 2% auto;
+  padding-top: 2%;
+  padding-bottom: 2%;
   /* Syntax: [image] [position] / [size] [repeat] [attachment] */
   background: radial-gradient(circle at top right, #8c7fad, #212a4b) center /
     cover no-repeat fixed;
@@ -19,8 +20,8 @@ body {
   justify-content: center;
   align-items: center;
   position: relative;
-  width: 100vw;
-  height: 842px;
+  width: 90vw;
+  height: 90vh;
   margin: 2% auto;
 }
 /*===========================================
