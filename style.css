@@ -7,7 +7,7 @@ body {
   background: radial-gradient(circle at top right, #8c7fad, #212a4b) center /
     cover no-repeat fixed;
   min-height: 100vh;
-   min-width: 100vw;
+  min-width: 100vw;
   align-items: center;
   justify-self: center;
   justify-items: center;
@@ -40,6 +40,7 @@ body {
   top: 0;
   left: 0;
   right: 0;
+  margin-top: 8px;
   margin-left: auto;
   margin-right: auto;
   display: flex;
@@ -166,7 +167,7 @@ body {
 .body-text {
   font-family: "Quicksand", sans-serif;
   font-optical-sizing: auto;
-  font-size: 40px;
+  font-size: 30px;
   font-weight: 400;
   line-height: 1.2;
   text-align: center;
@@ -259,6 +260,35 @@ svg#freepik_stories-breaking-barriers {
 svg#freepik_stories-self-confidence {
   height: 90%;
   bottom: -17%;
+}
+svg#freepik_stories-forest {
+  bottom: -5%;
+  left: -75%;
+  height: 70%;
+}
+svg#freepik_stories-sun-rise {
+  height: 90%;
+  bottom: -2%;
+}
+svg#freepik_stories-superhero {
+  height: 80%;
+  bottom: -15%;
+}
+svg#freepik_stories-water-drop {
+  height: 80%;
+  bottom: -13%;
+}
+vg#freepik_stories-anxiety {
+  height: 70%;
+  bottom: -11%;
+}
+svg#freepik_stories-fitness-stats {
+  height: 80%;
+  bottom: -12%;
+}
+svg#freepik_stories-do-not-enter-sign {
+  height: 90%;
+  bottom: -13%;
 }
 /*===========================================
 - SVG End
