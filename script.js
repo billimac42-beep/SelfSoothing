@@ -1,16 +1,14 @@
-let ticketElement = document.querySelector(".ticket");
+let cardElement = document.querySelector(".card");
 
 // Store references to existing elements we want to update
-let contentDiv = ticketElement.querySelector(".body-text");
-let goodnessDiv = ticketElement.querySelector(".body-text.goodness");
-let regularBodyTextDiv = ticketElement.querySelector(
-  ".body-text:not(.goodness)"
-);
-let currentSvgElement = ticketElement.querySelector(".ticket > svg"); // More robust selector for SVG
+let contentDiv = cardElement.querySelector(".body-text");
+let goodnessDiv = cardElement.querySelector(".body-text.goodness");
+let regularBodyTextDiv = cardElement.querySelector(".body-text:not(.goodness)");
+let currentSvgElement = cardElement.querySelector(".card > svg"); // More robust selector for SVG
 
 // --- NEW: Store references to the additional elements you want to update ---
-let currentStatusSpan = ticketElement.querySelector("#content .current-status");
-let footerNoteDiv = ticketElement.querySelector(".footer-note");
+let currentStatusSpan = cardElement.querySelector("#content .current-status");
+let footerNoteDiv = cardElement.querySelector(".footer-note");
 
 const contentOptions = [
   {
@@ -149,7 +147,7 @@ const contentOptions = [
 let currentOptionIndex = 0; // Initialize, will be randomized on first click
 
 // Function to update the content based on the current index
-function updateTicketContent() {
+function updateCardContent() {
   const optionData = contentOptions[currentOptionIndex];
 
   if (contentDiv) contentDiv.textContent = optionData.content;
@@ -168,7 +166,7 @@ function updateTicketContent() {
     if (currentSvgElement && currentSvgElement.parentNode) {
       currentSvgElement.parentNode.replaceChild(newSvg, currentSvgElement);
     } else {
-      ticketElement.appendChild(newSvg);
+      cardElement.appendChild(newSvg);
     }
     currentSvgElement = newSvg; // Update the reference to the new SVG
   } else if (currentSvgElement) {
@@ -179,7 +177,7 @@ function updateTicketContent() {
 
 // Initial content update - still shows the first option initially
 // If you want a random option on page load, call randomizeAndDisplay() here instead
-updateTicketContent();
+updateCardContent();
 
 document.body.addEventListener("click", () => {
   // Generate a random index instead of sequential increment
@@ -189,5 +187,5 @@ document.body.addEventListener("click", () => {
   } while (randomIndex === currentOptionIndex && contentOptions.length > 1); // Ensure it's not the same option if possible
 
   currentOptionIndex = randomIndex;
-  updateTicketContent();
+  updateCardContent();
 });
