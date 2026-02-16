@@ -43,8 +43,8 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 383px;
-  height: 832px;
+  width: 363px;
+  height: 780px;
   padding: 10px 20px;
   overflow: hidden; /*Required for the pink gradient :before*/
 
