@@ -358,12 +358,12 @@ p#tap-directions {
 /* Only show and style the loader on screens smaller than 768px (Mobile/Tablets) */
 @media (max-width: 768px) {
   #custom-loader {
-    display: flex; /* Overrides 'none' to show it on mobile */
+    display: flex !important; /* Overrides 'none' to show it on mobile */
     position: fixed;
     top: 0;
     left: 0;
-    width: 50%;
-    height: 50%;
+    width: 100%;
+    height: 100%;
     background-color: #ffffff;
     justify-content: center;
     align-items: center;
