@@ -112,17 +112,20 @@ You can control the color of the very top bar (where the time and battery are).
     font-size: 56px;
     color: #fff;
     text-align: center;
-    background: rgba(255, 255, 255, 0.3);
+    background: radial-gradient(circle at top right, rgba(247, 211, 170, 0.5) 0%, rgba(223, 179, 197, 0.5) 30%, rgba(187, 163, 207, 0.5) 50%, rgba(130, 137, 191, 0.7) 100%);
+    box-shadow: inset -10px 10px 25px rgba(214, 202, 226, 0.4), 2px -2px 32px rgba(197, 168, 202, 0.3), -28px 28px 22px rgba(49, 51, 93, 0.5), inset -2px 2px 0px rgba(255, 255, 255, 0.5);
+    backdrop-filter: blur(10px) brightness(1.2) saturate(150%);
+    -webkit-backdrop-filter: blur(10px) brightness(1.2) saturate(150%);
     border-radius: 50%;
     aspect-ratio: 1 / 1;
     align-content: center;
     padding: 32px;
     animation: logoPulse 2s infinite ease-in-out;
-       width: 304px;
-  height: 304px;
-  position: relative; /* Crucial for positioning pseudo-elements */
-  overflow: hidden; /* To clip expanding ripples */
-  z-index: 1; /* Ensure h1 is above its pseudo-elements if they are behind */
+    width: 304px;
+    height: 304px;
+    position: relative; /* Crucial for positioning pseudo-elements */
+    overflow: hidden; /* To clip expanding ripples */
+    z-index: 1; /* Ensure h1 is above its pseudo-elements if they are behind */
     }
     #custom-loader span.splash-subhead {
     font-size: 24px;
