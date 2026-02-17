@@ -6,8 +6,6 @@ body {
   /* Syntax: [image] [position] / [size] [repeat] [attachment] */
   background: radial-gradient(circle at top right, #8c7fad, #212a4b) center /
     cover no-repeat fixed;
-  min-height: 100vh;
-  min-width: 100vw;
   align-items: center;
   justify-self: center;
   justify-items: center;
