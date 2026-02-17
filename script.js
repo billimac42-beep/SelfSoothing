@@ -1,4 +1,8 @@
 // Service Worker Offline Functionality
+navigator.serviceWorker.ready.then(reg => {
+  reg.update(); // Forces the browser to check for a newer sw.js byte-by-byte
+});
+
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('/sw.js').then(reg => {
     reg.addEventListener('updatefound', () => {
