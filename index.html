@@ -64,7 +64,35 @@ Most apps don't "zoom" when you pinch them. This keeps your UI stable and preven
 <link rel="apple-touch-startup-image" media="screen and (device-width: 810px) and (device-height: 1080px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" href="10.2__iPad_portrait.png">
 <link rel="apple-touch-startup-image" media="screen and (device-width: 768px) and (device-height: 1024px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" href="9.7__iPad_Pro__7.9__iPad_mini__9.7__iPad_Air__9.7__iPad_portrait.png">
 <link rel="apple-touch-startup-image" media="screen and (device-width: 744px) and (device-height: 1133px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" href="8.3__iPad_Mini_portrait.png">
-  
+
+  <!-- Inline CSS for Custom Loader Intermediate Splash Screen -->
+  <style>
+  /* Only apply these styles on mobile-sized screens */
+  @media (max-width: 768px) {
+    #custom-loader {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background-color: #ffffff; 
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 99999;
+      opacity: 1;
+      transition: opacity 0.8s ease;
+    }
+  }
+
+  /* Keep it hidden on Desktop by default */
+  @media (min-width: 769px) {
+    #custom-loader {
+      display: none;
+    }
+  }
+</style>
+
   <!-- iphone homescreen Apple Touch Icon-->
   <link rel="apple-touch-icon" href="selfsoothing-icon.png">
 
