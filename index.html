@@ -89,6 +89,7 @@ Most apps don't "zoom" when you pinch them. This keeps your UI stable and preven
     transition: transform 1.5s cubic-bezier(0.19, 1, 0.22, 1), 
                 opacity 1.5s cubic-bezier(0.19, 1, 0.22, 1);
     }
+   
     /* The "Curtain" Exit Effect */
   .loader-curtain-up {
     transform: translateY(-100vh); /* Slides the entire screen up */
@@ -116,12 +117,49 @@ Most apps don't "zoom" when you pinch them. This keeps your UI stable and preven
     align-content: center;
     padding: 32px;
     animation: logoPulse 2s infinite ease-in-out;
+       width: 304px;
+  height: 304px;
+  position: relative; /* Crucial for positioning pseudo-elements */
+  overflow: hidden; /* To clip expanding ripples */
+  z-index: 1; /* Ensure h1 is above its pseudo-elements if they are behind */
     }
     #custom-loader span.splash-subhead {
     font-size: 24px;
     text-transform: lowercase;
     font-weight: 100;
     }
+
+#custom-loader h1::before,
+#custom-loader h1::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.15); /* Slightly different shade */
+  z-index: -1; /* Place behind the h1 content */
+  transform: scale(1);
+  opacity: 1;
+}
+#custom-loader h1::before {
+  animation: ripple1 3s infinite ease-out;
+}
+#custom-loader h1::after {
+  background-color: rgba(255, 255, 255, 0.1); /* Another shade */
+  animation: ripple2 3s infinite ease-out 1.5s; /* Stagger the animation */
+}
+@keyframes ripple1 {
+  0% { transform: scale(0.8); opacity: 0.5; }
+  50% { transform: scale(1.1); opacity: 0.8; }
+  100% { transform: scale(1.4); opacity: 0;}
+}
+@keyframes ripple2 {
+  0% { transform: scale(0.7); opacity: 0.4;}
+  50% { transform: scale(1.05); opacity: 0.7;}
+  100% { transform: scale(1.3); opacity: 0;  }
+}
   }
 
   /* Keep it hidden on Desktop by default */
