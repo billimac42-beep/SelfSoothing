@@ -1,25 +1,24 @@
 window.addEventListener('load', function() {
-  // Check if the app is running in "Standalone" mode (Home Screen)
   const isStandalone = window.matchMedia('(display-mode: standalone)').matches 
                        || window.navigator.standalone;
-
   const loader = document.getElementById('custom-loader');
 
   if (isStandalone && loader) {
-    // If it is the Home Screen version, wait 1.5s then fade out
+    // PHASE 1: Fade IN the fake loader immediately
+    loader.classList.add('fade-in');
+
+    // PHASE 2: Wait for the "smooth" transition, then fade OUT
     setTimeout(() => {
-      loader.classList.add('fade-out');
+      loader.style.transition = "opacity 0.8s ease";
+      loader.style.opacity = "0";
       
-      // Optional: Remove from DOM after fade to keep things clean
-      setTimeout(() => loader.remove(), 500); 
-    }, 1500);
+      // Remove from DOM once fully invisible
+      setTimeout(() => loader.remove(), 800);
+    }, 2000); // Adjust this for how long you want the fake splash to stay
   } else if (loader) {
-    // If it's just a browser tab, hide the loader immediately
     loader.style.display = 'none';
   }
 });
-
-
 
 
 
