@@ -19,7 +19,6 @@ body {
   justify-items: center;
   /* Disables pinch-zoom and double-tap zoom, only allows vertical scrolling */
   touch-action: pan-y;
-  position: fixed;
   width: 100%;
 }
 /*===========================================
