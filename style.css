@@ -370,6 +370,10 @@ p#tap-directions {
     z-index: 9999;
     transition: opacity 0.5s ease;
   }
+  #custom-loader img {
+    height: 100%;
+    width: auto;
+  }
 }
 
 /* Class to trigger the fade out */
