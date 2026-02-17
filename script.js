@@ -1,3 +1,13 @@
+// Service Worker Offline Functionality
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/sw.js')
+    .then(() => console.log("Service Worker Registered"))
+    .catch((err) => console.log("Service Worker Failed", err));
+}
+
+//
+
+// Custom "Loader" Functionality
 window.addEventListener('load', function() {
   const isStandalone = window.matchMedia('(display-mode: standalone)').matches 
                        || window.navigator.standalone;
@@ -21,8 +31,9 @@ window.addEventListener('load', function() {
   }
 });
 
+//
 
-
+// Card Swap Functionality
 let cardElement = document.querySelector(".card");
 
 // Store references to existing elements we want to update
@@ -285,8 +296,9 @@ document.body.addEventListener("click", () => {
   updateCardContent();
 });
 
+//
 
-// Add this to your script.js to disable all page-wide scrolling
+// Disable All Page-Wide Scrolling
 document.addEventListener('touchmove', function(e) {
     if (isStandalone) {
         e.preventDefault();
