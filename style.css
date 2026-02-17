@@ -24,6 +24,7 @@ body {
   width: 90vw;
   height: 88vh;
   max-height: 750px;
+  min-height: 550px;
   margin: 20px auto 0;
 }
 /*===========================================
@@ -332,4 +333,16 @@ p#tap-directions {
 }
 /*===========================================
 - StorySet Link End
+===========================================*/
+
+/*===========================================
++ Disable Tap Highlight Start
+===========================================*/
+* {
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none; /* Prevents long-press "save image" menus */
+  user-select: none; /* Prevents text selection on UI elements */
+}
+/*===========================================
+- Disable Tap Highlight End
 ===========================================*/
