@@ -9,18 +9,19 @@ if (!isStandalone) {
 
 window.addEventListener('load', function() {
   if (isStandalone) {
-    const loader = document.getElementById('custom-loader');
-    
-    // ADJUST THIS TIMER: How long the loader stays visible (in ms)
+  const loader = document.getElementById('custom-loader');
+
+  if (isStandalone && loader) {
+    // Keep the loader visible for 1.5 seconds
     setTimeout(() => {
-      loader.style.opacity = '0';
+      loader.classList.add('loader-fade-out');
       
-      // Remove from view entirely after fade finishes
-      setTimeout(() => {
-        loader.style.display = 'none';
-        document.body.classList.remove('loading-active');
-      }, 800); // Must match the CSS transition time
-    }, 1200); 
+      // Fully remove from the page once the 0.8s transition is done
+      setTimeout(() => loader.remove(), 800);
+    }, 1500); 
+  } else if (loader) {
+    // If not on Home Screen, don't show the loader at all
+    loader.style.display = 'none';
   }
 });
 
