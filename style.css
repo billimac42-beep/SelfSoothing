@@ -1,3 +1,11 @@
+html, body {
+  /* Prevents the 'bounce' effect at the edges of the page */
+  overscroll-behavior-y: none;
+  /* Ensures the body takes up the full screen height */
+  height: 100%;
+  overflow: hidden; 
+}
+
 body {
   display: initial;
   margin: 0;
@@ -11,6 +19,8 @@ body {
   justify-items: center;
   /* Disables pinch-zoom and double-tap zoom, only allows vertical scrolling */
   touch-action: pan-y;
+  position: fixed;
+  width: 100%;
 }
 /*===========================================
 + Card Stack Container Start
