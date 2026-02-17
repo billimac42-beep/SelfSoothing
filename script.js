@@ -15,7 +15,7 @@ window.addEventListener('load', function() {
         loader.remove();
       }, 1500); 
       
-    }, 2000); 
+    }, 6000); 
   } else if (loader) {
     loader.style.display = 'none';
   }
