@@ -1,9 +1,10 @@
-html, body {
+html,
+body {
   /* Prevents the 'bounce' effect at the edges of the page */
   overscroll-behavior-y: none;
   /* Ensures the body takes up the full screen height */
   height: 100vh;
-  overflow: hidden; 
+  overflow: hidden;
 }
 
 body {
@@ -355,5 +356,3 @@ p#tap-directions {
 /*===========================================
 - Disable Tap Highlight End
 ===========================================*/
-
-
