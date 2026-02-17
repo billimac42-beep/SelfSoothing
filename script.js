@@ -4,18 +4,21 @@ window.addEventListener('load', function() {
   const loader = document.getElementById('custom-loader');
 
   if (isStandalone && loader) {
-    // Keep the loader visible for 1.5 seconds
+    // 1. Give the user a moment to see the logo (1s)
     setTimeout(() => {
+      // 2. Start the 1.2s smooth fade out
       loader.classList.add('loader-fade-out');
       
-      // Fully remove from the page once the 0.8s transition is done
-      setTimeout(() => loader.remove(), 800);
-    }, 1500); 
+      // 3. Wait until the fade is COMPLETELY finished before removing from DOM
+      setTimeout(() => {
+        loader.remove();
+      }, 1200); // Must match the 1.2s transition in CSS
+    }, 1000); 
   } else if (loader) {
-    // If not on Home Screen, don't show the loader at all
     loader.style.display = 'none';
   }
 });
+
 
 
 
