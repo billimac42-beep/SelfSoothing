@@ -1,14 +1,24 @@
 window.addEventListener('load', function() {
-  // Only run the fade-out logic if the screen is mobile-sized
-  if (window.innerWidth <= 768) {
-    setTimeout(function() {
-      const loader = document.getElementById('custom-loader');
-      if (loader) {
-        loader.classList.add('fade-out');
-      }
-    }, 1500); 
+  // Check if the app is running in "Standalone" mode (Home Screen)
+  const isStandalone = window.matchMedia('(display-mode: standalone)').matches 
+                       || window.navigator.standalone;
+
+  const loader = document.getElementById('custom-loader');
+
+  if (isStandalone && loader) {
+    // If it is the Home Screen version, wait 1.5s then fade out
+    setTimeout(() => {
+      loader.classList.add('fade-out');
+      
+      // Optional: Remove from DOM after fade to keep things clean
+      setTimeout(() => loader.remove(), 500); 
+    }, 1500);
+  } else if (loader) {
+    // If it's just a browser tab, hide the loader immediately
+    loader.style.display = 'none';
   }
 });
+
 
 
 
