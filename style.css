@@ -2,15 +2,14 @@ html, body {
   /* Prevents the 'bounce' effect at the edges of the page */
   overscroll-behavior-y: none;
   /* Ensures the body takes up the full screen height */
-  height: 100%;
+  height: 100vh;
   overflow: hidden; 
 }
 
 body {
-  display: initial;
+  display: block;
   margin: 0;
-  padding-top: env(safe-area-inset-top); /* Keeps content below status bar icons */
-  padding-bottom: 2%;
+  padding: 0;
   /* Syntax: [image] [position] / [size] [repeat] [attachment] */
   background: radial-gradient(circle at top right, #8c7fad, #212a4b) center /
     cover no-repeat fixed;
@@ -20,6 +19,7 @@ body {
   /* Disables pinch-zoom and double-tap zoom, only allows vertical scrolling */
   touch-action: pan-y;
   width: 100%;
+  height: -webkit-fill-available;
 }
 /*===========================================
 + Card Stack Container Start
@@ -35,6 +35,7 @@ body {
   max-height: 750px;
   min-height: 550px;
   margin: 20px auto 0;
+  padding-top: env(safe-area-inset-top); /* Keeps content below status bar icons */
 }
 /*===========================================
 - Card Stack Container End
