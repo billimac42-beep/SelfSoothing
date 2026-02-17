@@ -1,15 +1,37 @@
-<!DOCTYPE html>
+<!-- DOCTYPE html -->
 <html>
-   <!-- Start Head -------------------------->
+
+<!-- Start Head -------------------------->
+
 <head>
-    <title>Self Soothing</title>
-   <!-- open without the Safari/Chrome search bar -->
+  <title>SelfSoothing</title>
+  <!-- Hide The Browser Interface
+ This removes the address bar and bottom navigation buttons in Safari/Chrome when opened from the home screen. ------------>
   <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <!-- Style The Status Bar
+You can control the color of the very top bar (where the time and battery are).
+- default: White bar with black text.
+- black: Black bar with white text.
+- black-translucent: Content scrolls underneath the status bar (best for a modern look). --------------------------->
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <!-- Prevent User Zooming (Optional but App-like)
+Most apps don't "zoom" when you pinch them. This keeps your UI stable and prevents accidental zooming while tapping buttons. -------------------------------->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+  <!-- iphone loading splash screen-->
+  <!-- iPhone 15, 14, 13, 12 (1170px x 2532px) -->
+  <link rel="apple-touch-startup-image" href="splash-iphone.png" media="(device-width: 390px) and (device-height: 844px) and (-webkit-device-pixel-ratio: 3)">
+
+  <!-- iPhone 15 Pro Max, 14 Pro Max (1290px x 2796px) -->
+  <link rel="apple-touch-startup-image" href="splash-iphone-max.png" media="(device-width: 430px) and (device-height: 932px) and (-webkit-device-pixel-ratio: 3)">
+
   <!-- iphone homescreen Apple Touch Icon-->
   <link rel="apple-touch-icon" href="selfsoothing-icon.png">
-    <!-- Links your style.css file -->
-    <link rel="stylesheet" href="style.css">
-  
+
+  <!-- Links your style.css file -->
+  <link rel="stylesheet" href="style.css">
+
   <!-- Basic Responsive Viewport ----------->
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -19,11 +41,11 @@
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=GFS+Neohellenic:ital,wght@0,400;0,700;1,400;1,700&family=Quicksand:wght@300..700&family=Roboto:ital,wght@0,100..900;1,100..900&family=Sora:wght@100..800&display=swap" rel="stylesheet">
 </head>
 <!-- End Head ---------------------------->
-</head>
 
 <!-- Start Body -------------------------->
 
 <body>
+
   <!-- Start Cards ----------------------->
   <div id="card-stack">
     <!-- Start Card 1 ---------------------->
@@ -65,8 +87,9 @@
   <!-- Start Item -------------------------->
   <!-- End Item ---------------------------->
 
-    <!-- Links your script.js file -->
-    <script src="script.js"></script>
+  <!-- Links your script.js file -->
+  <script src="script.js"></script>
 </body>
-  <!-- End Body ---------------------------->
+<!-- End Body ---------------------------->
+
 </html>
