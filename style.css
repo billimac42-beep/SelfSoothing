@@ -9,6 +9,8 @@ body {
   align-items: center;
   justify-self: center;
   justify-items: center;
+  /* Disables pinch-zoom and double-tap zoom, only allows vertical scrolling */
+  touch-action: pan-y;
 }
 /*===========================================
 + Card Stack Container Start
