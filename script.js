@@ -1,14 +1,6 @@
-// Run this as soon as the script loads, don't wait for 'load' event
-const isStandalone = window.matchMedia('(display-mode: standalone)').matches 
-                     || window.navigator.standalone;
-
-if (!isStandalone) {
-  // If not on home screen, kill the loader immediately to avoid annoyance
-  document.getElementById('custom-loader').style.display = 'none';
-}
-
 window.addEventListener('load', function() {
-  if (isStandalone) {
+  const isStandalone = window.matchMedia('(display-mode: standalone)').matches 
+                       || window.navigator.standalone;
   const loader = document.getElementById('custom-loader');
 
   if (isStandalone && loader) {
@@ -24,6 +16,7 @@ window.addEventListener('load', function() {
     loader.style.display = 'none';
   }
 });
+
 
 
 
