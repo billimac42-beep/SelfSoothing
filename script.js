@@ -2,16 +2,14 @@ window.addEventListener('load', function() {
   // Only run the fade-out logic if the screen is mobile-sized
   if (window.innerWidth <= 768) {
     setTimeout(function() {
-      // Detects if the site is running in "Standalone" mode (Saved to Home Screen)
-const isStandalone = window.matchMedia('(display-mode: standalone)').matches 
-                     || window.navigator.standalone;
-
-if (isStandalone) {
-   // Run loader logic only for the "App" version
-}
+      const loader = document.getElementById('custom-loader');
+      if (loader) {
+        loader.classList.add('fade-out');
+      }
     }, 1500); 
   }
 });
+
 
 
 
