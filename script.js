@@ -2,6 +2,11 @@
 navigator.serviceWorker.ready.then(reg => {
   reg.update(); // Forces the browser to check for a newer sw.js byte-by-byte
 });
+navigator.serviceWorker.register('/sw.js').then(reg => {
+  // Check if there is ALREADY a worker waiting from a previous session
+  if (reg.waiting) {
+    document.getElementById('update-banner').style.display = 'block';
+  }
 
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('/sw.js').then(reg => {
