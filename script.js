@@ -284,3 +284,11 @@ document.body.addEventListener("click", () => {
   currentOptionIndex = randomIndex;
   updateCardContent();
 });
+
+
+// Add this to your script.js to disable all page-wide scrolling
+document.addEventListener('touchmove', function(e) {
+    if (isStandalone) {
+        e.preventDefault();
+    }
+}, { passive: false });
