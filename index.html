@@ -83,17 +83,22 @@ Most apps don't "zoom" when you pinch them. This keeps your UI stable and preven
       /* Initial state is invisible */
     opacity: 0; 
     /* This triggers as soon as the element exists */
-    animation: loaderFadeIn 0.4s ease forwards;
+    animation: loaderFadeIn 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
     }
-     /* The actual fade-in movement */
-  @keyframes loaderFadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-  }
-    /* This will be used by JS to fade it out later */
-  .loader-fade-out {
+     .loader-fade-out {
     opacity: 0 !important;
-    transition: opacity 0.8s ease;
+    /* Longer duration + specialized easing = smoother look */
+    transition: opacity 1.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    pointer-events: none;
+  }
+  @keyframes loaderFadeIn {
+    from { opacity: 0; transform: scale(1.05); } /* Slight zoom in for depth */
+    to { opacity: 1; transform: scale(1); }
+  }
+  @keyframes logoPulse {
+    0% { transform: scale(1); opacity: 0.8; }
+    50% { transform: scale(1.05); opacity: 1; }
+    100% { transform: scale(1); opacity: 0.8; }
   }
     #custom-loader h1 {
     font-family: 'Quicksand', sans-serif;
@@ -106,6 +111,7 @@ Most apps don't "zoom" when you pinch them. This keeps your UI stable and preven
     aspect-ratio: 1 / 1;
     align-content: center;
     padding: 32px;
+    animation: logoPulse 2s infinite ease-in-out;
     }
     #custom-loader span.splash-subhead {
     font-size: 24px;
