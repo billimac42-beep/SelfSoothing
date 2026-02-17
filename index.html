@@ -89,12 +89,6 @@ Most apps don't "zoom" when you pinch them. This keeps your UI stable and preven
     transition: transform 1.5s cubic-bezier(0.19, 1, 0.22, 1), 
                 opacity 1.5s cubic-bezier(0.19, 1, 0.22, 1);
     }
-     .loader-fade-out {
-    opacity: 0 !important;
-    /* Longer duration + specialized easing = smoother look */
-    transition: opacity 1.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
-    pointer-events: none;
-  }
     /* The "Curtain" Exit Effect */
   .loader-curtain-up {
     transform: translateY(-100vh); /* Slides the entire screen up */
