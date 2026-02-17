@@ -1,10 +1,15 @@
 window.addEventListener('load', function() {
-  // Sets a 1.5 second delay before fading out
-  setTimeout(function() {
-    const loader = document.getElementById('custom-loader');
-    loader.classList.add('fade-out');
-  }, 1500); 
+  // Only run the fade-out logic if the screen is mobile-sized
+  if (window.innerWidth <= 768) {
+    setTimeout(function() {
+      const loader = document.getElementById('custom-loader');
+      if (loader) {
+        loader.classList.add('fade-out');
+      }
+    }, 1500); 
+  }
 });
+
 
 
 let cardElement = document.querySelector(".card");
