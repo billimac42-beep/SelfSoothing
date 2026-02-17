@@ -1,24 +1,29 @@
+// Run this as soon as the script loads, don't wait for 'load' event
+const isStandalone = window.matchMedia('(display-mode: standalone)').matches 
+                     || window.navigator.standalone;
+
+if (!isStandalone) {
+  // If not on home screen, kill the loader immediately to avoid annoyance
+  document.getElementById('custom-loader').style.display = 'none';
+}
+
 window.addEventListener('load', function() {
-  const isStandalone = window.matchMedia('(display-mode: standalone)').matches 
-                       || window.navigator.standalone;
-  const loader = document.getElementById('custom-loader');
-
-  if (isStandalone && loader) {
-    // PHASE 1: Fade IN the fake loader immediately
-    loader.classList.add('fade-in');
-
-    // PHASE 2: Wait for the "smooth" transition, then fade OUT
+  if (isStandalone) {
+    const loader = document.getElementById('custom-loader');
+    
+    // ADJUST THIS TIMER: How long the loader stays visible (in ms)
     setTimeout(() => {
-      loader.style.transition = "opacity 0.8s ease";
-      loader.style.opacity = "0";
+      loader.style.opacity = '0';
       
-      // Remove from DOM once fully invisible
-      setTimeout(() => loader.remove(), 800);
-    }, 2000); // Adjust this for how long you want the fake splash to stay
-  } else if (loader) {
-    loader.style.display = 'none';
+      // Remove from view entirely after fade finishes
+      setTimeout(() => {
+        loader.style.display = 'none';
+        document.body.classList.remove('loading-active');
+      }, 800); // Must match the CSS transition time
+    }, 1200); 
   }
 });
+
 
 
 
