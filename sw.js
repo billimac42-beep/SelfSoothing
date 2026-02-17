@@ -25,3 +25,10 @@ self.addEventListener('fetch', (event) => {
     })
   );
 });
+
+// self.skipWaiting() forces the new service worker to become active
+self.addEventListener('message', (event) => {
+  if (event.data === 'skipWaiting') {
+    self.skipWaiting();
+  }
+});
