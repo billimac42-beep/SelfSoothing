@@ -288,9 +288,9 @@ You can control the color of the very top bar (where the time and battery are).
   <!-- End Tap/Click Directions ------------>
 
   <!-- Start Update Available Button --------------------->
-  <div id="update-banner" style="display:none; position:fixed; bottom:20px; left:20px; right:20px; background:#333; color:#fff; padding:15px; border-radius:10px; z-index:10000; text-align:center; box-shadow: 0 4px 15px rgba(0,0,0,0.3);">
+  <div id="update-banner" style="/* display:none; */position:fixed;bottom: 0;left: 0;right: 0;background: rgba(255,255,255,0.4);backdrop-filter: blur(10px);-webkit-backdrop-filter: blur(10px);color: #252c4e;padding:15px;z-index:10000;text-align:center;box-shadow: 0 -4px 15px rgba(37, 44, 78, 0.9);font-family: 'Roboto', sans-serif;font-size: 1rem;">
     A new version is available!
-    <button id="update-btn" style="margin-left:10px; background:#fff; color:#252c4e; border:none; padding:5px 15px; border-radius:50%; font-weight:bold;">Update Now</button>
+    <button id="update-btn" style="margin-left:10px;background: #252c4e;color: #fff;border:none;padding: 0.75em 1.5em;border-radius: 9999px;font-family: 'Quicksand', sans-serif;font-size: 1rem;font-weight: 500;box-sizing: border-box;cursor: pointer;">Update Now</button>
   </div>
   <!-- End Update Available Button ----------------------->
 
