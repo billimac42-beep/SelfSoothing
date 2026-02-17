@@ -75,15 +75,26 @@ Most apps don't "zoom" when you pinch them. This keeps your UI stable and preven
       left: 0;
       width: 100vw;
       height: 100vh;
-      background-color: #ffffff; 
       display: flex;
       justify-content: center;
       align-items: center;
       z-index: 99999;
-      opacity: 1;
       background: radial-gradient(circle at top right, #8c7fad, #212a4b) center / cover no-repeat fixed;
-      transition: opacity 0.8s ease;
+      /* Initial state is invisible */
+    opacity: 0; 
+    /* This triggers as soon as the element exists */
+    animation: loaderFadeIn 0.4s ease forwards;
     }
+     /* The actual fade-in movement */
+  @keyframes loaderFadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+    /* This will be used by JS to fade it out later */
+  .loader-fade-out {
+    opacity: 0 !important;
+    transition: opacity 0.8s ease;
+  }
     #custom-loader h1 {
     font-family: 'Quicksand', sans-serif;
     font-weight: 400;
