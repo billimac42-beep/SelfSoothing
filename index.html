@@ -81,11 +81,25 @@ Most apps don't "zoom" when you pinch them. This keeps your UI stable and preven
       align-items: center;
       z-index: 99999;
       opacity: 1;
+      background: radial-gradient(circle at top right, #8c7fad, #212a4b) center / cover no-repeat fixed;
       transition: opacity 0.8s ease;
     }
-    #custom-loader img {
-    height: 200%;
-    width: auto;
+    #custom-loader h1 {
+    font-family: 'Quicksand', sans-serif;
+    font-weight: 400;
+    font-size: 56px;
+    color: #fff;
+    text-align: center;
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    aspect-ratio: 1 / 1;
+    align-content: center;
+    padding: 32px;
+    }
+    #custom-loader span.splash-subhead {
+    font-size: 24px;
+    text-transform: lowercase;
+    font-weight: 100;
     }
   }
 
@@ -119,7 +133,7 @@ Most apps don't "zoom" when you pinch them. This keeps your UI stable and preven
 <!-- Added Splash Screen for Custom Delay -->
   <div id="custom-loader">
   <!-- You can put your logo here -->
-  <img src="iPhone_16__iPhone_15_Pro__iPhone_15__iPhone_14_Pro_portrait.png" alt="Logo">
+  <h1><span class="splash-subhead">Welcome to</span><br>Self Soothing</h1>
 </div>
 
 
