@@ -1,3 +1,12 @@
+window.addEventListener('load', function() {
+  // Sets a 1.5 second delay before fading out
+  setTimeout(function() {
+    const loader = document.getElementById('custom-loader');
+    loader.classList.add('fade-out');
+  }, 1500); 
+});
+
+
 let cardElement = document.querySelector(".card");
 
 // Store references to existing elements we want to update
