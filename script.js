@@ -1,9 +1,31 @@
 // Service Worker Offline Functionality
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js')
-    .then(() => console.log("Service Worker Registered"))
-    .catch((err) => console.log("Service Worker Failed", err));
+  navigator.serviceWorker.register('/sw.js').then(reg => {
+    reg.addEventListener('updatefound', () => {
+      const newWorker = reg.installing;
+      newWorker.addEventListener('statechange', () => {
+        // Check if the new worker has finished downloading
+        if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+          const banner = document.getElementById('update-banner');
+          banner.style.display = 'block';
+
+          document.getElementById('update-btn').addEventListener('click', () => {
+            newWorker.postMessage('skipWaiting');
+          });
+        }
+      });
+    });
+  });
+
+  // Reload the page once the new service worker takes over
+  let refreshing;
+  navigator.serviceWorker.addEventListener('controllerchange', () => {
+    if (refreshing) return;
+    window.location.reload();
+    refreshing = true;
+  });
 }
+
 
 //
 
