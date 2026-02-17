@@ -141,7 +141,7 @@ You can control the color of the very top bar (where the time and battery are).
   width: 100%;
   height: 100%;
   border-radius: 50%;
-  background-color: rgba(255, 255, 255, 0.15); /* Slightly different shade */
+  background: radial-gradient(circle at top right, rgba(247, 211, 170, 0.3) 0%, rgba(223, 179, 197, 0.3) 30%, rgba(187, 163, 207, 0.3) 50%, rgba(130, 137, 191, 0.3) 100%)
   z-index: -1; /* Place behind the h1 content */
   transform: scale(1);
   opacity: 1;
@@ -150,7 +150,7 @@ You can control the color of the very top bar (where the time and battery are).
   animation: ripple1 3s infinite ease-out;
 }
 #custom-loader h1::after {
-  background-color: rgba(255, 255, 255, 0.1); /* Another shade */
+  background: radial-gradient(circle at top right, rgba(247, 211, 170, 0.15) 0%, rgba(223, 179, 197, 0.15) 30%, rgba(187, 163, 207, 0.15) 50%, rgba(130, 137, 191, 0.15) 100%)
   animation: ripple2 3s infinite ease-out 1.5s; /* Stagger the animation */
 }
 @keyframes ripple1 {
