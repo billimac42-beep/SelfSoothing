@@ -35,7 +35,6 @@ body {
   max-height: 750px;
   min-height: 550px;
   margin: 20px auto 0;
-  padding-top: env(safe-area-inset-top); /* Keeps content below status bar icons */
 }
 /*===========================================
 - Card Stack Container End
