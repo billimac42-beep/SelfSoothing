@@ -3,6 +3,7 @@
  */
 let currentOptionIndex = 0;
 
+const contentOptions = [
 {
     // Option 1
     content: "I can sit with discomfort.",
