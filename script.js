@@ -327,35 +327,44 @@ const contentOptions = [
 * 6. THE CONTENT SWAP FUNCTION
 */
 function updateCardContent() {
-  const option = contentOptions[currentOptionIndex];
+  const optionData = contentOptions[currentOptionIndex];
 
-  // 1. Update the Main Text
-  if (contentDiv) {
-    contentDiv.textContent = option.content;
-  }
+  if (contentDiv) contentDiv.textContent = optionData.content;
+  if (goodnessDiv) goodnessDiv.textContent = optionData.goodness;
+  if (regularBodyTextDiv) regularBodyTextDiv.textContent = optionData.content;
 
-  // 2. Update the "Goodness" Text
-  if (goodnessDiv) {
-    goodnessDiv.textContent = option.goodness;
-  }
+  if (currentStatusSpan) currentStatusSpan.textContent = optionData.status;
+  if (footerNoteDiv) footerNoteDiv.textContent = optionData.note;
 
-  // 3. Update the Status (if you have this element)
-  if (currentStatusSpan) {
-    currentStatusSpan.textContent = option.status || "";
-  }
-
-  // 4. Update the Footer (if you have this element)
-  if (footerNoteDiv) {
-    footerNoteDiv.textContent = option.footer || "";
-  }
-
-  // 5. Swap the SVG
-  if (currentSvgElement && option.svg) {
-    // This replaces the old SVG with the new one from your array
-    currentSvgElement.outerHTML = option.svg;
-    
-    // IMPORTANT: After replacing outerHTML, the old variable is "dead".
-    // We must re-select the new SVG so the next click can find it.
-    currentSvgElement = cardElement.querySelector("svg");
+  // Handle SVG replacement
+  if (optionData.svg) {
+    const newSvg = new DOMParser().parseFromString(
+      optionData.svg,
+      "image/svg+xml"
+    ).documentElement;
+    if (currentSvgElement && currentSvgElement.parentNode) {
+      currentSvgElement.parentNode.replaceChild(newSvg, currentSvgElement);
+    } else {
+      cardElement.appendChild(newSvg);
+    }
+    currentSvgElement = newSvg; // Update the reference to the new SVG
+  } else if (currentSvgElement) {
+    currentSvgElement.remove();
+    currentSvgElement = null;
   }
 }
+
+// Initial content update - still shows the first option initially
+// If you want a random option on page load, call randomizeAndDisplay() here instead
+updateCardContent();
+
+document.body.addEventListener("click", () => {
+  // Generate a random index instead of sequential increment
+  let randomIndex;
+  do {
+    randomIndex = Math.floor(Math.random() * contentOptions.length);
+  } while (randomIndex === currentOptionIndex && contentOptions.length > 1); // Ensure it's not the same option if possible
+
+  currentOptionIndex = randomIndex;
+  updateCardContent();
+});
