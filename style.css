@@ -53,6 +53,7 @@ body {
   max-height: 750px;
   min-height: 550px;
   margin: 20px auto 0;
+  padding-top: 32px;
 }
 /*===========================================
 - Card Stack Container End
@@ -333,6 +334,7 @@ div#tap-directions-holder {
   width: 100%;
   justify-content: center;
   align-items: center;
+  padding-bottom: 8px;
 }
 
 /*Tap Directions P*/
