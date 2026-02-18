@@ -25,13 +25,20 @@ body {
 }
 
 #app-container {
-  height: 100%;
-  width: 100%;
-  /* This allows your content to stay static while the browser 
-     handles the pull-to-refresh at the top level */
-  overflow-y: auto; 
-  -webkit-overflow-scrolling: touch;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    /* This allows the container to 'contain' your cards 
+       without letting the whole page bounce */
+    overflow: hidden; 
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
+
 /*===========================================
 + Card Stack Container Start
 ===========================================*/
