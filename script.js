@@ -334,6 +334,11 @@ function updateCardContent() {
         goodnessDiv.textContent = option.goodness;
     }
 
+    // Inject the card content 
+    if (regularBodyTextDiv) {
+        regularBodyTextDiv.textContent = optionData.content;
+    }
+
     // Inject the status and footer (if they exist in your array)
     if (currentStatusSpan) {
         currentStatusSpan.textContent = option.status || "";
