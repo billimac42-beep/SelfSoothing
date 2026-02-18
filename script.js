@@ -1,86 +1,123 @@
-// 1. SERVICE WORKER LOGIC (Keep as is at the top)
+/**
+ * 1. SERVICE WORKER & UPDATES
+ */
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js').then(reg => {
-    if (reg.waiting) showUpdateBanner(reg.waiting);
-    reg.addEventListener('updatefound', () => {
-      const newWorker = reg.installing;
-      newWorker.addEventListener('statechange', () => {
-        if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-          showUpdateBanner(newWorker);
-        }
-      });
+    navigator.serviceWorker.register('/sw.js').then(reg => {
+        // Safety check for waiting workers
+        if (reg.waiting) showUpdateBanner(reg.waiting);
+
+        reg.addEventListener('updatefound', () => {
+            const newWorker = reg.installing;
+            newWorker.addEventListener('statechange', () => {
+                if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                    showUpdateBanner(newWorker);
+                }
+            });
+        });
     });
-  });
-  let refreshing;
-  navigator.serviceWorker.addEventListener('controllerchange', () => {
-    if (refreshing) return;
-    window.location.reload();
-    refreshing = true;
-  });
+
+    let refreshing;
+    navigator.serviceWorker.addEventListener('controllerchange', () => {
+        if (refreshing) return;
+        window.location.reload();
+        refreshing = true;
+    });
 }
 
 function showUpdateBanner(worker) {
     const banner = document.getElementById('update-banner');
     const updateBtn = document.getElementById('update-btn');
-    banner.style.display = 'block';
-    updateBtn.addEventListener('click', () => worker.postMessage('skipWaiting'));
+    if (banner) banner.style.display = 'block';
+    if (updateBtn) {
+        updateBtn.addEventListener('click', () => {
+            worker.postMessage('skipWaiting');
+        });
+    }
 }
 
-// 2. DEFINE VARIABLES GLOBALLY (But don't assign them yet)
+/**
+ * 2. GLOBAL APP VARIABLES
+ */
 let currentOptionIndex = 0;
-let cardElement, contentDiv, goodnessDiv, regularBodyTextDiv, currentSvgElement, currentStatusSpan, footerNoteDiv;
+// These will be assigned once the DOM is loaded
+let appContainer, cardElement, contentDiv, goodnessDiv, currentSvgElement, currentStatusSpan, footerNoteDiv;
 
-// 3. MAIN APP INITIALIZATION
+/**
+ * 3. MAIN APP INITIALIZATION (On Load)
+ */
 window.addEventListener('load', function() {
-  const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
-  const loader = document.getElementById('custom-loader');
-  const appContainer = document.querySelector("#app-container");
-  
-  // Assign selectors now that the DOM is definitely loaded
-  cardElement = document.querySelector(".card");
-  
-  if (!cardElement || !appContainer) {
-    console.error("Required elements (.card or #app-container) not found in HTML.");
-    return;
-  }
-
-  // Set up inner references
-  contentDiv = cardElement.querySelector(".body-text");
-  goodnessDiv = cardElement.querySelector(".body-text.goodness");
-  regularBodyTextDiv = cardElement.querySelector(".body-text:not(.goodness)");
-  currentSvgElement = cardElement.querySelector(".card > svg");
-  currentStatusSpan = cardElement.querySelector("#content .current-status");
-  footerNoteDiv = cardElement.querySelector(".footer-note");
-
-  // Initialize first card
-  updateCardContent(); 
-
-  // Handle Loader Removal
-  if (isStandalone && loader) {
-    setTimeout(() => {
-      loader.classList.add('loader-curtain-up');
-      setTimeout(() => loader.remove(), 1500); 
-    }, 3000); 
-  } else if (loader) {
-    loader.style.display = 'none';
-  }
-
-  // Handle Card Clicks
-  appContainer.addEventListener("click", (event) => {
-    if (event.target.closest('#update-banner') || event.target.tagName === 'BUTTON') return;
+    const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
+    const loader = document.getElementById('custom-loader');
     
-    let randomIndex;
-    do {
-      randomIndex = Math.floor(Math.random() * contentOptions.length);
-    } while (randomIndex === currentOptionIndex && contentOptions.length > 1);
+    // Assign DOM Elements
+    appContainer = document.querySelector("#app-container");
+    cardElement = document.querySelector(".card");
 
-    currentOptionIndex = randomIndex;
+    if (!cardElement || !appContainer) {
+        console.error("Required elements not found. Check your HTML for #app-container and .card.");
+        return;
+    }
+
+    // Assign Inner References
+    contentDiv = cardElement.querySelector(".body-text");
+    goodnessDiv = cardElement.querySelector(".body-text.goodness");
+    currentSvgElement = cardElement.querySelector(".card > svg");
+    currentStatusSpan = cardElement.querySelector(".current-status"); // Removed #content for flexibility
+    footerNoteDiv = cardElement.querySelector(".footer-note");
+
+    // Initialize first card content
     updateCardContent();
-    if (navigator.vibrate) navigator.vibrate(15);
-  });
+
+    // Handle Loader Removal
+    if (isStandalone && loader) {
+        setTimeout(() => {
+            loader.classList.add('loader-curtain-up');
+            setTimeout(() => loader.remove(), 1500);
+        }, 3000);
+    } else if (loader) {
+        loader.style.display = 'none';
+    }
+
+    // Handle Card Clicks
+    appContainer.addEventListener("click", (event) => {
+        // Prevent swap if clicking update banner or buttons
+        if (event.target.closest('#update-banner') || event.target.tagName === 'BUTTON') return;
+
+        // Logic to get a new random index
+        let randomIndex;
+        do {
+            randomIndex = Math.floor(Math.random() * contentOptions.length);
+        } while (randomIndex === currentOptionIndex && contentOptions.length > 1);
+
+        currentOptionIndex = randomIndex;
+        updateCardContent();
+
+        // Android Haptics
+        if (navigator.vibrate) navigator.vibrate(15);
+    });
 });
 
-// 4. CONTENT OPTIONS AND UPDATE FUNCTION (Outside the load listener)
+/**
+ * 4. GESTURE & SCROLL MANAGEMENT
+ */
+document.addEventListener('touchstart', function(e) {
+    this.allowUp = (window.scrollY === 0);
+    this.lastY = e.touches[0].pageY;
+}, { passive: false });
+
+document.addEventListener('touchmove', function(e) {
+    const currentY = e.touches[0].pageY;
+    const isScrollingUp = currentY > this.lastY;
+    
+    // If pulling down at top, let browser refresh. Else, keep it static.
+    if (this.allowUp && isScrollingUp) {
+        return; 
+    }
+}, { passive: false });
+
+/**
+* 5. CONTENT OPTIONS AND UPDATE FUNCTION (Outside the load listener)
+*/
 const contentOptions = [
   {
     // Option 1
@@ -286,32 +323,20 @@ const contentOptions = [
 ];
 
 
-// 5. THE CONTENT SWAP FUNCTION
+/**
+* 6. THE CONTENT SWAP FUNCTION
+*/
 function updateCardContent() {
-  const option = contentOptions[currentOptionIndex];
-  
-  // Safety checks to ensure elements exist before updating
-  if (contentDiv) contentDiv.textContent = option.content;
-  if (goodnessDiv) goodnessDiv.textContent = option.goodness;
-  if (currentStatusSpan) currentStatusSpan.textContent = option.status || "";
-  if (footerNoteDiv) footerNoteDiv.textContent = option.footer || "";
-  
-  if (currentSvgElement && option.svg) {
-      currentSvgElement.outerHTML = option.svg;
-      // Re-select the SVG because outerHTML replaces the element in the DOM
-      currentSvgElement = document.querySelector(".card > svg");
-  }
+    const option = contentOptions[currentOptionIndex];
+    
+    if (contentDiv) contentDiv.textContent = option.content;
+    if (goodnessDiv) goodnessDiv.textContent = option.goodness;
+    if (currentStatusSpan) currentStatusSpan.textContent = option.status || "";
+    if (footerNoteDiv) footerNoteDiv.textContent = option.footer || "";
+    
+    if (currentSvgElement && option.svg) {
+        // Replace the SVG and re-bind the reference
+        currentSvgElement.outerHTML = option.svg;
+        currentSvgElement = cardElement.querySelector("svg");
+    }
 }
-
-// 6. SCROLLING LOGIC (Move this INSIDE the 'load' listener or keep it here 
-// ONLY if you change 'isStandalone' to a global variable)
-document.addEventListener('touchstart', function(e) {
-  this.allowUp = (window.scrollY === 0);
-  this.lastY = e.touches[0].pageY;
-}, { passive: false });
-
-document.addEventListener('touchmove', function(e) {
-  const isScrollingUp = e.touches[0].pageY > this.lastY;
-  if (this.allowUp && isScrollingUp) return; 
-  // Note: 'isStandalone' must be defined globally for this line to work here
-}, { passive: false });
