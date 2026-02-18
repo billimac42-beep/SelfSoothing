@@ -319,7 +319,6 @@ document.addEventListener('touchmove', function(e) {
 /**
  * 5. THE CONTENT INJECTION ENGINE
  */
-let currentOptionIndex = 0; // Initialize, will be randomized on first click
 
 // Function to update the content based on the current index
 function updateCardContent() {
