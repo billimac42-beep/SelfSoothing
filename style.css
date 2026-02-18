@@ -97,15 +97,6 @@ body {
     /* Dark card outer shadow */ -28px 28px 22px rgba(49, 51, 93, 0.5);
 }
 
-.card::before,
-.card::after {
-  pointer-events: none;
-}
-
-.card::before { z-index: 0; }
-.card::after  { z-index: 1; }
-.card > *     { position: relative; z-index: 2; }
-
 
 /*Pink Gradient Background*/
 .card:before {
