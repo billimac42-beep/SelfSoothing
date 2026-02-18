@@ -1,6 +1,7 @@
 html,
 body {
-  height: 100vh;
+  min-height: 100vh;
+  height: 100%;
   margin: 0;
   /* Allows pull-to-refresh but stops "rubber-banding" on the sides */
   overscroll-behavior-y: auto; 
@@ -21,7 +22,6 @@ body {
   /* Disables pinch-zoom and double-tap zoom, only allows vertical scrolling */
   touch-action: pan-y;
   width: 100%;
-  height: -webkit-fill-available;
 }
 
 #app-container {
@@ -63,7 +63,7 @@ body {
 ===========================================*/
 .card {
   container-type: inline-size;
-  box-sizing: content-box;
+  box-sizing: border-box;
   position: absolute;
   top: 0;
   left: 0;
@@ -96,6 +96,16 @@ body {
     /* Subtle outer glow that spills onto the background */ 2px -2px 32px rgba(197, 168, 202, 0.3),
     /* Dark card outer shadow */ -28px 28px 22px rgba(49, 51, 93, 0.5);
 }
+
+.card::before,
+.card::after {
+  pointer-events: none;
+}
+
+.card::before { z-index: 0; }
+.card::after  { z-index: 1; }
+.card > *     { position: relative; z-index: 2; }
+
 
 /*Pink Gradient Background*/
 .card:before {
