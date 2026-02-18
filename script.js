@@ -315,3 +315,41 @@ document.addEventListener('touchmove', function(e) {
     if (this.allowUp && isScrollingUp) return; 
 }, { passive: false });
 
+/**
+ * 5. THE CONTENT INJECTION ENGINE
+ */
+function updateCardContent() {
+    // Safety check: Make sure we have data
+    if (!contentOptions || contentOptions.length === 0) return;
+
+    const option = contentOptions[currentOptionIndex];
+
+    // Inject the main text
+    if (contentDiv) {
+        contentDiv.textContent = option.content;
+    }
+
+    // Inject the 'Goodness' branding
+    if (goodnessDiv) {
+        goodnessDiv.textContent = option.goodness;
+    }
+
+    // Inject the status and footer (if they exist in your array)
+    if (currentStatusSpan) {
+        currentStatusSpan.textContent = option.status || "";
+    }
+    if (footerNoteDiv) {
+        footerNoteDiv.textContent = option.footer || "";
+    }
+
+    // Handle the SVG Swap
+    if (currentSvgElement && option.svg) {
+        // Replace the old SVG with the new string from the array
+        currentSvgElement.outerHTML = option.svg;
+        
+        // IMPORTANT: Re-select the new SVG so the next click can find it
+        currentSvgElement = cardElement.querySelector("svg");
+    }
+}
+
+
