@@ -333,8 +333,21 @@ document.body.addEventListener("click", () => {
 
 
 // Disable All Page-Wide Scrolling
+document.addEventListener('touchstart', function(e) {
+  // Only allow the refresh gesture if we are at the very top of the page
+  this.allowUp = (window.scrollY === 0);
+}, { passive: false });
+
 document.addEventListener('touchmove', function(e) {
-    if (isStandalone) {
-        e.preventDefault();
-    }
+  const isScrollingUp = e.touches[0].pageY > this.lastY;
+  
+  // If trying to pull down at the top, let the browser handle it (Refresh)
+  if (this.allowUp && isScrollingUp) {
+    return; 
+  }
+  
+  // Otherwise, prevent the "bounce" white space
+  if (isStandalone && !isScrollingUp) {
+    // e.preventDefault(); // Uncomment only if you want to lock bottom-bounce
+  }
 }, { passive: false });
