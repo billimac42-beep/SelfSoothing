@@ -358,7 +358,7 @@ function updateCardContent() {
 // If you want a random option on page load, call randomizeAndDisplay() here instead
 updateCardContent();
 
-document.body.addEventListener("click", () => {
+appContainer.body.addEventListener("click", () => {
   // Generate a random index instead of sequential increment
   let randomIndex;
   do {
