@@ -327,16 +327,35 @@ const contentOptions = [
 * 6. THE CONTENT SWAP FUNCTION
 */
 function updateCardContent() {
-    const option = contentOptions[currentOptionIndex];
+  const option = contentOptions[currentOptionIndex];
+
+  // 1. Update the Main Text
+  if (contentDiv) {
+    contentDiv.textContent = option.content;
+  }
+
+  // 2. Update the "Goodness" Text
+  if (goodnessDiv) {
+    goodnessDiv.textContent = option.goodness;
+  }
+
+  // 3. Update the Status (if you have this element)
+  if (currentStatusSpan) {
+    currentStatusSpan.textContent = option.status || "";
+  }
+
+  // 4. Update the Footer (if you have this element)
+  if (footerNoteDiv) {
+    footerNoteDiv.textContent = option.footer || "";
+  }
+
+  // 5. Swap the SVG
+  if (currentSvgElement && option.svg) {
+    // This replaces the old SVG with the new one from your array
+    currentSvgElement.outerHTML = option.svg;
     
-    if (contentDiv) contentDiv.textContent = option.content;
-    if (goodnessDiv) goodnessDiv.textContent = option.goodness;
-    if (currentStatusSpan) currentStatusSpan.textContent = option.status || "";
-    if (footerNoteDiv) footerNoteDiv.textContent = option.footer || "";
-    
-    if (currentSvgElement && option.svg) {
-        // Replace the SVG and re-bind the reference
-        currentSvgElement.outerHTML = option.svg;
-        currentSvgElement = cardElement.querySelector("svg");
-    }
+    // IMPORTANT: After replacing outerHTML, the old variable is "dead".
+    // We must re-select the new SVG so the next click can find it.
+    currentSvgElement = cardElement.querySelector("svg");
+  }
 }
