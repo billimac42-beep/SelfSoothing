@@ -1,15 +1,16 @@
 html,
 body {
-  /* Prevents the 'bounce' effect at the edges of the page */
-  overscroll-behavior-y: none;
-  /* Ensures the body takes up the full screen height */
   height: 100vh;
-  overflow: hidden;
+  margin: 0;
+  /* Allows pull-to-refresh but stops "rubber-banding" on the sides */
+  overscroll-behavior-y: auto; 
+  overscroll-behavior-x: none;
+  /* Keeps the body from shifting, but allows the pull gesture */
+  overflow: hidden; 
 }
 
 body {
   display: block;
-  margin: 0;
   padding: 0;
   /* Syntax: [image] [position] / [size] [repeat] [attachment] */
   background: radial-gradient(circle at top right, #8c7fad, #212a4b) center /
@@ -21,6 +22,15 @@ body {
   touch-action: pan-y;
   width: 100%;
   height: -webkit-fill-available;
+}
+
+#app-container {
+  height: 100%;
+  width: 100%;
+  /* This allows your content to stay static while the browser 
+     handles the pull-to-refresh at the top level */
+  overflow-y: auto; 
+  -webkit-overflow-scrolling: touch;
 }
 /*===========================================
 + Card Stack Container Start
