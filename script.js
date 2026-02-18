@@ -1,125 +1,9 @@
 /**
- * 1. SERVICE WORKER & UPDATES
- */
-if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('/sw.js').then(reg => {
-        // Safety check for waiting workers
-        if (reg.waiting) showUpdateBanner(reg.waiting);
-
-        reg.addEventListener('updatefound', () => {
-            const newWorker = reg.installing;
-            newWorker.addEventListener('statechange', () => {
-                if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                    showUpdateBanner(newWorker);
-                }
-            });
-        });
-    });
-
-    let refreshing;
-    navigator.serviceWorker.addEventListener('controllerchange', () => {
-        if (refreshing) return;
-        window.location.reload();
-        refreshing = true;
-    });
-}
-
-function showUpdateBanner(worker) {
-    const banner = document.getElementById('update-banner');
-    const updateBtn = document.getElementById('update-btn');
-    if (banner) banner.style.display = 'block';
-    if (updateBtn) {
-        updateBtn.addEventListener('click', () => {
-            worker.postMessage('skipWaiting');
-        });
-    }
-}
-
-/**
- * 2. GLOBAL APP VARIABLES
+ * 1. DATA & CONTENT FUNCTIONS (Must be at the top)
  */
 let currentOptionIndex = 0;
-// These will be assigned once the DOM is loaded
-let appContainer, cardElement, contentDiv, goodnessDiv, currentSvgElement, currentStatusSpan, footerNoteDiv;
 
-/**
- * 3. MAIN APP INITIALIZATION (On Load)
- */
-window.addEventListener('load', function() {
-    const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
-    const loader = document.getElementById('custom-loader');
-    
-    // Assign DOM Elements
-    appContainer = document.querySelector("#app-container");
-    cardElement = document.querySelector(".card");
-
-    if (!cardElement || !appContainer) {
-        console.error("Required elements not found. Check your HTML for #app-container and .card.");
-        return;
-    }
-
-    // Assign Inner References
-    contentDiv = cardElement.querySelector(".body-text");
-    goodnessDiv = cardElement.querySelector(".body-text.goodness");
-    currentSvgElement = cardElement.querySelector(".card > svg");
-    currentStatusSpan = cardElement.querySelector(".current-status"); // Removed #content for flexibility
-    footerNoteDiv = cardElement.querySelector(".footer-note");
-
-    // Initialize first card content
-    updateCardContent();
-
-    // Handle Loader Removal
-    if (isStandalone && loader) {
-        setTimeout(() => {
-            loader.classList.add('loader-curtain-up');
-            setTimeout(() => loader.remove(), 1500);
-        }, 3000);
-    } else if (loader) {
-        loader.style.display = 'none';
-    }
-
-    // Handle Card Clicks
-    appContainer.addEventListener("click", (event) => {
-        // Prevent swap if clicking update banner or buttons
-        if (event.target.closest('#update-banner') || event.target.tagName === 'BUTTON') return;
-
-        // Logic to get a new random index
-        let randomIndex;
-        do {
-            randomIndex = Math.floor(Math.random() * contentOptions.length);
-        } while (randomIndex === currentOptionIndex && contentOptions.length > 1);
-
-        currentOptionIndex = randomIndex;
-        updateCardContent();
-
-        // Android Haptics
-        if (navigator.vibrate) navigator.vibrate(15);
-    });
-});
-
-/**
- * 4. GESTURE & SCROLL MANAGEMENT
- */
-document.addEventListener('touchstart', function(e) {
-    this.allowUp = (window.scrollY === 0);
-    this.lastY = e.touches[0].pageY;
-}, { passive: false });
-
-document.addEventListener('touchmove', function(e) {
-    const currentY = e.touches[0].pageY;
-    const isScrollingUp = currentY > this.lastY;
-    
-    // If pulling down at top, let browser refresh. Else, keep it static.
-    if (this.allowUp && isScrollingUp) {
-        return; 
-    }
-}, { passive: false });
-
-/**
-* 5. CONTENT OPTIONS AND UPDATE FUNCTION (Outside the load listener)
-*/
-const contentOptions = [
-  {
+{
     // Option 1
     content: "I can sit with discomfort.",
     goodness: "Goodness Buggins™",
@@ -323,48 +207,109 @@ const contentOptions = [
 ];
 
 
-/**
-* 6. THE CONTENT SWAP FUNCTION
-*/
+// Global references for your elements
+let appContainer, cardElement, contentDiv, goodnessDiv, currentSvgElement, currentStatusSpan, footerNoteDiv;
+
 function updateCardContent() {
-  const optionData = contentOptions[currentOptionIndex];
-
-  if (contentDiv) contentDiv.textContent = optionData.content;
-  if (goodnessDiv) goodnessDiv.textContent = optionData.goodness;
-  if (regularBodyTextDiv) regularBodyTextDiv.textContent = optionData.content;
-
-  if (currentStatusSpan) currentStatusSpan.textContent = optionData.status;
-  if (footerNoteDiv) footerNoteDiv.textContent = optionData.note;
-
-  // Handle SVG replacement
-  if (optionData.svg) {
-    const newSvg = new DOMParser().parseFromString(
-      optionData.svg,
-      "image/svg+xml"
-    ).documentElement;
-    if (currentSvgElement && currentSvgElement.parentNode) {
-      currentSvgElement.parentNode.replaceChild(newSvg, currentSvgElement);
-    } else {
-      cardElement.appendChild(newSvg);
+    const option = contentOptions[currentOptionIndex];
+    if (contentDiv) contentDiv.textContent = option.content;
+    if (goodnessDiv) goodnessDiv.textContent = option.goodness;
+    if (currentStatusSpan) currentStatusSpan.textContent = option.status || "";
+    if (footerNoteDiv) footerNoteDiv.textContent = option.footer || "";
+    
+    if (currentSvgElement && option.svg) {
+        currentSvgElement.outerHTML = option.svg;
+        currentSvgElement = cardElement.querySelector("svg");
     }
-    currentSvgElement = newSvg; // Update the reference to the new SVG
-  } else if (currentSvgElement) {
-    currentSvgElement.remove();
-    currentSvgElement = null;
-  }
 }
 
-// Initial content update - still shows the first option initially
-// If you want a random option on page load, call randomizeAndDisplay() here instead
-updateCardContent();
+/**
+ * 2. SERVICE WORKER LOGIC
+ */
+if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/sw.js').then(reg => {
+        if (reg.waiting) showUpdateBanner(reg.waiting);
+        reg.addEventListener('updatefound', () => {
+            const newWorker = reg.installing;
+            newWorker.addEventListener('statechange', () => {
+                if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                    showUpdateBanner(newWorker);
+                }
+            });
+        });
+    });
+    let refreshing;
+    navigator.serviceWorker.addEventListener('controllerchange', () => {
+        if (refreshing) return;
+        window.location.reload();
+        refreshing = true;
+    });
+}
 
-appContainer.body.addEventListener("click", () => {
-  // Generate a random index instead of sequential increment
-  let randomIndex;
-  do {
-    randomIndex = Math.floor(Math.random() * contentOptions.length);
-  } while (randomIndex === currentOptionIndex && contentOptions.length > 1); // Ensure it's not the same option if possible
+function showUpdateBanner(worker) {
+    const banner = document.getElementById('update-banner');
+    const updateBtn = document.getElementById('update-btn');
+    if (banner) banner.style.display = 'block';
+    if (updateBtn) updateBtn.addEventListener('click', () => worker.postMessage('skipWaiting'));
+}
 
-  currentOptionIndex = randomIndex;
-  updateCardContent();
+/**
+ * 3. MAIN APP INITIALIZATION (On Load)
+ */
+window.addEventListener('load', function() {
+    const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
+    const loader = document.getElementById('custom-loader');
+    
+    appContainer = document.querySelector("#app-container");
+    cardElement = document.querySelector(".card");
+
+    if (!cardElement || !appContainer) {
+        console.error("Required elements not found.");
+        return;
+    }
+
+    // Assign Inner References
+    contentDiv = cardElement.querySelector(".body-text");
+    goodnessDiv = cardElement.querySelector(".body-text.goodness");
+    currentSvgElement = cardElement.querySelector(".card > svg");
+    currentStatusSpan = cardElement.querySelector(".current-status"); 
+    footerNoteDiv = cardElement.querySelector(".footer-note");
+
+    // Initialize Content
+    updateCardContent();
+
+    // Handle Loader Removal
+    if (isStandalone && loader) {
+        setTimeout(() => {
+            loader.classList.add('loader-curtain-up');
+            setTimeout(() => loader.remove(), 1500);
+        }, 3000);
+    } else if (loader) {
+        loader.style.display = 'none';
+    }
+
+    appContainer.addEventListener("click", (event) => {
+        if (event.target.closest('#update-banner') || event.target.tagName === 'BUTTON') return;
+        let randomIndex;
+        do {
+            randomIndex = Math.floor(Math.random() * contentOptions.length);
+        } while (randomIndex === currentOptionIndex && contentOptions.length > 1);
+        currentOptionIndex = randomIndex;
+        updateCardContent();
+        if (navigator.vibrate) navigator.vibrate(15);
+    });
 });
+
+/**
+ * 4. GESTURE MANAGEMENT
+ */
+document.addEventListener('touchstart', function(e) {
+    this.allowUp = (window.scrollY === 0);
+    this.lastY = e.touches[0].pageY;
+}, { passive: false });
+
+document.addEventListener('touchmove', function(e) {
+    const isScrollingUp = e.touches[0].pageY > this.lastY;
+    if (this.allowUp && isScrollingUp) return; 
+}, { passive: false });
+
