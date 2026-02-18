@@ -270,11 +270,12 @@ window.addEventListener('load', function() {
     }
 
     // Assign Inner References
-    contentDiv = cardElement.querySelector(".body-text");
-    goodnessDiv = cardElement.querySelector(".body-text.goodness");
-    currentSvgElement = cardElement.querySelector(".card > svg");
-    currentStatusSpan = cardElement.querySelector(".current-status"); 
-    footerNoteDiv = cardElement.querySelector(".footer-note");
+let contentDiv = cardElement.querySelector(".body-text");
+let goodnessDiv = cardElement.querySelector(".body-text.goodness");
+let regularBodyTextDiv = cardElement.querySelector(".body-text:not(.goodness)");
+let currentSvgElement = cardElement.querySelector(".card > svg"); // More robust selector for SVG
+let currentStatusSpan = cardElement.querySelector("#content .current-status");
+let footerNoteDiv = cardElement.querySelector(".footer-note");
 
     // Initialize Content
     updateCardContent();
