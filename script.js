@@ -215,6 +215,7 @@ function updateCardContent() {
     const option = contentOptions[currentOptionIndex];
     if (contentDiv) contentDiv.textContent = option.content;
     if (goodnessDiv) goodnessDiv.textContent = option.goodness;
+    if (regularBodyTextDiv) regularBodyTextDiv.textContent = optionData.content;
     if (currentStatusSpan) currentStatusSpan.textContent = option.status || "";
     if (footerNoteDiv) footerNoteDiv.textContent = option.footer || "";
     
@@ -318,43 +319,35 @@ document.addEventListener('touchmove', function(e) {
 /**
  * 5. THE CONTENT INJECTION ENGINE
  */
+let currentOptionIndex = 0; // Initialize, will be randomized on first click
+
+// Function to update the content based on the current index
 function updateCardContent() {
-    // Safety check: Make sure we have data
-    if (!contentOptions || contentOptions.length === 0) return;
+  const optionData = contentOptions[currentOptionIndex];
 
-    const option = contentOptions[currentOptionIndex];
+  if (contentDiv) contentDiv.textContent = optionData.content;
+  if (goodnessDiv) goodnessDiv.textContent = optionData.goodness;
+  if (regularBodyTextDiv) regularBodyTextDiv.textContent = optionData.content;
 
-    // Inject the main text
-    if (contentDiv) {
-        contentDiv.textContent = option.content;
-    }
+  if (currentStatusSpan) currentStatusSpan.textContent = optionData.status;
+  if (footerNoteDiv) footerNoteDiv.textContent = optionData.note;
 
-    // Inject the 'Goodness' branding
-    if (goodnessDiv) {
-        goodnessDiv.textContent = option.goodness;
+  // Handle SVG replacement
+  if (optionData.svg) {
+    const newSvg = new DOMParser().parseFromString(
+      optionData.svg,
+      "image/svg+xml"
+    ).documentElement;
+    if (currentSvgElement && currentSvgElement.parentNode) {
+      currentSvgElement.parentNode.replaceChild(newSvg, currentSvgElement);
+    } else {
+      cardElement.appendChild(newSvg);
     }
-
-    // Inject the card content 
-    if (regularBodyTextDiv) {
-        regularBodyTextDiv.textContent = optionData.content;
-    }
-
-    // Inject the status and footer (if they exist in your array)
-    if (currentStatusSpan) {
-        currentStatusSpan.textContent = option.status || "";
-    }
-    if (footerNoteDiv) {
-        footerNoteDiv.textContent = option.footer || "";
-    }
-
-    // Handle the SVG Swap
-    if (currentSvgElement && option.svg) {
-        // Replace the old SVG with the new string from the array
-        currentSvgElement.outerHTML = option.svg;
-        
-        // IMPORTANT: Re-select the new SVG so the next click can find it
-        currentSvgElement = cardElement.querySelector("svg");
-    }
+    currentSvgElement = newSvg; // Update the reference to the new SVG
+  } else if (currentSvgElement) {
+    currentSvgElement.remove();
+    currentSvgElement = null;
+  }
 }
 
 
