@@ -1,32 +1,27 @@
 // Service Worker Offline Functionality
-navigator.serviceWorker.ready.then(reg => {
-  reg.update(); // Forces the browser to check for a newer sw.js byte-by-byte
-});
-navigator.serviceWorker.register('/sw.js').then(reg => {
-  // Check if there is ALREADY a worker waiting from a previous session
-  if (reg.waiting) {
-    document.getElementById('update-banner').style.display = 'block';
-  }
-
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('/sw.js').then(reg => {
+    
+    // --- 1. THE SAFETY CHECK ---
+    // If a new service worker is already "waiting" (from a previous session),
+    // show the banner immediately.
+    if (reg.waiting) {
+        showUpdateBanner(reg.waiting);
+    }
+
+    // --- 2. THE ACTIVE WATCHER ---
+    // This watches for an update being found while the app is CURRENTLY open.
     reg.addEventListener('updatefound', () => {
       const newWorker = reg.installing;
       newWorker.addEventListener('statechange', () => {
-        // Check if the new worker has finished downloading
         if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-          const banner = document.getElementById('update-banner');
-          banner.style.display = 'block';
-
-          document.getElementById('update-btn').addEventListener('click', () => {
-            newWorker.postMessage('skipWaiting');
-          });
+          showUpdateBanner(newWorker);
         }
       });
     });
   });
 
-  // Reload the page once the new service worker takes over
+  // --- 3. THE RELOAD LOGIC ---
   let refreshing;
   navigator.serviceWorker.addEventListener('controllerchange', () => {
     if (refreshing) return;
@@ -35,8 +30,18 @@ if ('serviceWorker' in navigator) {
   });
 }
 
+// Helper function to keep the code clean
+function showUpdateBanner(worker) {
+    const banner = document.getElementById('update-banner');
+    const updateBtn = document.getElementById('update-btn');
+    
+    banner.style.display = 'block';
 
-//
+    updateBtn.addEventListener('click', () => {
+        worker.postMessage('skipWaiting');
+    });
+}
+
 
 // Custom "Loader" Functionality
 window.addEventListener('load', function() {
@@ -62,7 +67,6 @@ window.addEventListener('load', function() {
   }
 });
 
-//
 
 // Card Swap Functionality
 let cardElement = document.querySelector(".card");
@@ -327,7 +331,6 @@ document.body.addEventListener("click", () => {
   updateCardContent();
 });
 
-//
 
 // Disable All Page-Wide Scrolling
 document.addEventListener('touchmove', function(e) {
