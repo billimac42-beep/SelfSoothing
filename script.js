@@ -1,16 +1,7 @@
-// Service Worker Offline Functionality
+// --- 1. Service Worker Logic (Stays at top) ---
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('/sw.js').then(reg => {
-    
-    // --- 1. THE SAFETY CHECK ---
-    // If a new service worker is already "waiting" (from a previous session),
-    // show the banner immediately.
-    if (reg.waiting) {
-        showUpdateBanner(reg.waiting);
-    }
-
-    // --- 2. THE ACTIVE WATCHER ---
-    // This watches for an update being found while the app is CURRENTLY open.
+    if (reg.waiting) showUpdateBanner(reg.waiting);
     reg.addEventListener('updatefound', () => {
       const newWorker = reg.installing;
       newWorker.addEventListener('statechange', () => {
@@ -20,8 +11,6 @@ if ('serviceWorker' in navigator) {
       });
     });
   });
-
-  // --- 3. THE RELOAD LOGIC ---
   let refreshing;
   navigator.serviceWorker.addEventListener('controllerchange', () => {
     if (refreshing) return;
@@ -30,42 +19,56 @@ if ('serviceWorker' in navigator) {
   });
 }
 
-// Helper function to keep the code clean
 function showUpdateBanner(worker) {
     const banner = document.getElementById('update-banner');
     const updateBtn = document.getElementById('update-btn');
-    
     banner.style.display = 'block';
-
-    updateBtn.addEventListener('click', () => {
-        worker.postMessage('skipWaiting');
-    });
+    updateBtn.addEventListener('click', () => worker.postMessage('skipWaiting'));
 }
 
-
-// Custom "Loader" Functionality
+// --- 2. THE FIX: Move App Logic inside Load Event ---
 window.addEventListener('load', function() {
-  const isStandalone = window.matchMedia('(display-mode: standalone)').matches 
-                       || window.navigator.standalone;
+  const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
   const loader = document.getElementById('custom-loader');
+  const appContainer = document.querySelector("#app-container");
+  let cardElement = document.querySelector(".card");
 
+  // If elements aren't found, stop script here to avoid errors
+  if (!cardElement || !appContainer) {
+    console.error("Required elements (.card or #app-container) not found in HTML.");
+    return;
+  }
+
+  // --- 3. Initialize Card Content ---
+  updateCardContent(); 
+
+  // --- 4. Handle Loader Removal ---
   if (isStandalone && loader) {
-    // 1. Wait for 1 second while the user sees the logo
     setTimeout(() => {
-      
-      // 2. Trigger the curtain slide and fade
       loader.classList.add('loader-curtain-up');
-      
-      // 3. Remove from DOM ONLY after the 1.5s animation finishes
-      setTimeout(() => {
-        loader.remove();
-      }, 1500); 
-      
+      setTimeout(() => loader.remove(), 1500); 
     }, 3000); 
   } else if (loader) {
     loader.style.display = 'none';
   }
+
+  // --- 5. Handle Card Clicks ---
+  appContainer.addEventListener("click", (event) => {
+    if (event.target.closest('#update-banner') || event.target.tagName === 'BUTTON') return;
+    
+    // Randomize Index logic
+    let randomIndex;
+    do {
+      randomIndex = Math.floor(Math.random() * contentOptions.length);
+    } while (randomIndex === currentOptionIndex && contentOptions.length > 1);
+
+    currentOptionIndex = randomIndex;
+    updateCardContent();
+    if (navigator.vibrate) navigator.vibrate(15);
+  });
 });
+
+// Keep your contentOptions array and updateCardContent function below this...
 
 
 // Card Swap Functionality
@@ -323,7 +326,7 @@ function updateCardContent() {
 const appContainer = document.querySelector("#app-container");
 
 // Initial content update
-randomizeAndDisplay();
+updateCardContent();
 
 // 2. Change the listener from document.body to appContainer
 appContainer.addEventListener("click", (event) => {
