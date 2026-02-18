@@ -304,17 +304,35 @@ window.addEventListener('load', function() {
 });
 
 /**
- * 4. GESTURE MANAGEMENT
+ * 4. GESTURE & SCROLL MANAGEMENT
  */
+let lastY = 0;
+
 document.addEventListener('touchstart', function(e) {
-    this.allowUp = (window.scrollY === 0);
-    this.lastY = e.touches[0].pageY;
+    // Check if we are at the absolute top of the page
+    lastY = e.touches[0].pageY;
 }, { passive: false });
 
 document.addEventListener('touchmove', function(e) {
-    const isScrollingUp = e.touches[0].pageY > this.lastY;
-    if (this.allowUp && isScrollingUp) return; 
+    const currentY = e.touches[0].pageY;
+    const isScrollingUp = currentY > lastY;
+    const isAtTop = window.scrollY === 0;
+
+    // 1. Allow Pull-to-Refresh: If at top and pulling down, do nothing (let browser handle it)
+    if (isAtTop && isScrollingUp) {
+        return; 
+    }
+
+    // 2. Prevent Rubber Banding: If trying to scroll past the top/bottom boundaries
+    // or if the app should be static, prevent default.
+    if (isAtTop && !isScrollingUp) {
+        // Optional: prevent the 'upward' bounce if your app is one screen
+        // e.preventDefault(); 
+    }
+    
+    lastY = currentY;
 }, { passive: false });
+
 
 /**
  * 5. THE CONTENT INJECTION ENGINE
