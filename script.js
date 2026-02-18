@@ -204,7 +204,7 @@ const contentOptions = [
     // --- NEW: Add content for new elements ---
     status: "",
     note: "YOU ARE OKAY"
-  },
+  }
 ];
 
 
