@@ -69,6 +69,7 @@ window.addEventListener('load', function() {
 
 
 // Card Swap Functionality
+const appContainer = document.querySelector("#app-container"); // Add this at the top of your script
 let cardElement = document.querySelector(".card");
 
 // Store references to existing elements we want to update
@@ -318,18 +319,35 @@ function updateCardContent() {
 
 // Initial content update - still shows the first option initially
 // If you want a random option on page load, call randomizeAndDisplay() here instead
-updateCardContent();
+// 1. Get a reference to your new container
+const appContainer = document.querySelector("#app-container");
 
-document.body.addEventListener("click", () => {
-  // Generate a random index instead of sequential increment
+// Initial content update
+randomizeAndDisplay();
+
+// 2. Change the listener from document.body to appContainer
+appContainer.addEventListener("click", (event) => {
+  
+  // SAFETY: If the user clicks the "Update" button, don't swap the card
+  if (event.target.closest('#update-banner') || event.target.tagName === 'BUTTON') {
+    return;
+  }
+
+  // Generate a random index
   let randomIndex;
   do {
     randomIndex = Math.floor(Math.random() * contentOptions.length);
-  } while (randomIndex === currentOptionIndex && contentOptions.length > 1); // Ensure it's not the same option if possible
+  } while (randomIndex === currentOptionIndex && contentOptions.length > 1);
 
   currentOptionIndex = randomIndex;
+  
+  // 3. Trigger the swap
   updateCardContent();
+  
+  // OPTIONAL: Add that haptic "tick" we discussed for mobile
+  if (navigator.vibrate) navigator.vibrate(15);
 });
+
 
 
 // Disable All Page-Wide Scrolling
