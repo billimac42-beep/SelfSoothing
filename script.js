@@ -1,4 +1,4 @@
-// --- 1. Service Worker Logic (Stays at top) ---
+// 1. SERVICE WORKER LOGIC (Keep as is at the top)
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('/sw.js').then(reg => {
     if (reg.waiting) showUpdateBanner(reg.waiting);
@@ -26,23 +26,36 @@ function showUpdateBanner(worker) {
     updateBtn.addEventListener('click', () => worker.postMessage('skipWaiting'));
 }
 
-// --- 2. THE FIX: Move App Logic inside Load Event ---
+// 2. DEFINE VARIABLES GLOBALLY (But don't assign them yet)
+let currentOptionIndex = 0;
+let cardElement, contentDiv, goodnessDiv, regularBodyTextDiv, currentSvgElement, currentStatusSpan, footerNoteDiv;
+
+// 3. MAIN APP INITIALIZATION
 window.addEventListener('load', function() {
   const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
   const loader = document.getElementById('custom-loader');
   const appContainer = document.querySelector("#app-container");
-  let cardElement = document.querySelector(".card");
-
-  // If elements aren't found, stop script here to avoid errors
+  
+  // Assign selectors now that the DOM is definitely loaded
+  cardElement = document.querySelector(".card");
+  
   if (!cardElement || !appContainer) {
     console.error("Required elements (.card or #app-container) not found in HTML.");
     return;
   }
 
-  // --- 3. Initialize Card Content ---
+  // Set up inner references
+  contentDiv = cardElement.querySelector(".body-text");
+  goodnessDiv = cardElement.querySelector(".body-text.goodness");
+  regularBodyTextDiv = cardElement.querySelector(".body-text:not(.goodness)");
+  currentSvgElement = cardElement.querySelector(".card > svg");
+  currentStatusSpan = cardElement.querySelector("#content .current-status");
+  footerNoteDiv = cardElement.querySelector(".footer-note");
+
+  // Initialize first card
   updateCardContent(); 
 
-  // --- 4. Handle Loader Removal ---
+  // Handle Loader Removal
   if (isStandalone && loader) {
     setTimeout(() => {
       loader.classList.add('loader-curtain-up');
@@ -52,11 +65,10 @@ window.addEventListener('load', function() {
     loader.style.display = 'none';
   }
 
-  // --- 5. Handle Card Clicks ---
+  // Handle Card Clicks
   appContainer.addEventListener("click", (event) => {
     if (event.target.closest('#update-banner') || event.target.tagName === 'BUTTON') return;
     
-    // Randomize Index logic
     let randomIndex;
     do {
       randomIndex = Math.floor(Math.random() * contentOptions.length);
@@ -68,23 +80,7 @@ window.addEventListener('load', function() {
   });
 });
 
-// Keep your contentOptions array and updateCardContent function below this...
-
-
-// Card Swap Functionality
-const appContainer = document.querySelector("#app-container"); // Add this at the top of your script
-let cardElement = document.querySelector(".card");
-
-// Store references to existing elements we want to update
-let contentDiv = cardElement.querySelector(".body-text");
-let goodnessDiv = cardElement.querySelector(".body-text.goodness");
-let regularBodyTextDiv = cardElement.querySelector(".body-text:not(.goodness)");
-let currentSvgElement = cardElement.querySelector(".card > svg"); // More robust selector for SVG
-
-// --- NEW: Store references to the additional elements you want to update ---
-let currentStatusSpan = cardElement.querySelector("#content .current-status");
-let footerNoteDiv = cardElement.querySelector(".footer-note");
-
+// 4. CONTENT OPTIONS AND UPDATE FUNCTION (Outside the load listener)
 const contentOptions = [
   {
     // Option 1
@@ -289,86 +285,33 @@ const contentOptions = [
   },
 ];
 
-let currentOptionIndex = 0; // Initialize, will be randomized on first click
 
-// Function to update the content based on the current index
+// 5. THE CONTENT SWAP FUNCTION
 function updateCardContent() {
-  const optionData = contentOptions[currentOptionIndex];
-
-  if (contentDiv) contentDiv.textContent = optionData.content;
-  if (goodnessDiv) goodnessDiv.textContent = optionData.goodness;
-  if (regularBodyTextDiv) regularBodyTextDiv.textContent = optionData.content;
-
-  if (currentStatusSpan) currentStatusSpan.textContent = optionData.status;
-  if (footerNoteDiv) footerNoteDiv.textContent = optionData.note;
-
-  // Handle SVG replacement
-  if (optionData.svg) {
-    const newSvg = new DOMParser().parseFromString(
-      optionData.svg,
-      "image/svg+xml"
-    ).documentElement;
-    if (currentSvgElement && currentSvgElement.parentNode) {
-      currentSvgElement.parentNode.replaceChild(newSvg, currentSvgElement);
-    } else {
-      cardElement.appendChild(newSvg);
-    }
-    currentSvgElement = newSvg; // Update the reference to the new SVG
-  } else if (currentSvgElement) {
-    currentSvgElement.remove();
-    currentSvgElement = null;
+  const option = contentOptions[currentOptionIndex];
+  
+  // Safety checks to ensure elements exist before updating
+  if (contentDiv) contentDiv.textContent = option.content;
+  if (goodnessDiv) goodnessDiv.textContent = option.goodness;
+  if (currentStatusSpan) currentStatusSpan.textContent = option.status || "";
+  if (footerNoteDiv) footerNoteDiv.textContent = option.footer || "";
+  
+  if (currentSvgElement && option.svg) {
+      currentSvgElement.outerHTML = option.svg;
+      // Re-select the SVG because outerHTML replaces the element in the DOM
+      currentSvgElement = document.querySelector(".card > svg");
   }
 }
 
-// Initial content update - still shows the first option initially
-// If you want a random option on page load, call randomizeAndDisplay() here instead
-// 1. Get a reference to your new container
-const appContainer = document.querySelector("#app-container");
-
-// Initial content update
-updateCardContent();
-
-// 2. Change the listener from document.body to appContainer
-appContainer.addEventListener("click", (event) => {
-  
-  // SAFETY: If the user clicks the "Update" button, don't swap the card
-  if (event.target.closest('#update-banner') || event.target.tagName === 'BUTTON') {
-    return;
-  }
-
-  // Generate a random index
-  let randomIndex;
-  do {
-    randomIndex = Math.floor(Math.random() * contentOptions.length);
-  } while (randomIndex === currentOptionIndex && contentOptions.length > 1);
-
-  currentOptionIndex = randomIndex;
-  
-  // 3. Trigger the swap
-  updateCardContent();
-  
-  // OPTIONAL: Add that haptic "tick" we discussed for mobile
-  if (navigator.vibrate) navigator.vibrate(15);
-});
-
-
-
-// Disable All Page-Wide Scrolling
+// 6. SCROLLING LOGIC (Move this INSIDE the 'load' listener or keep it here 
+// ONLY if you change 'isStandalone' to a global variable)
 document.addEventListener('touchstart', function(e) {
-  // Only allow the refresh gesture if we are at the very top of the page
   this.allowUp = (window.scrollY === 0);
+  this.lastY = e.touches[0].pageY;
 }, { passive: false });
 
 document.addEventListener('touchmove', function(e) {
   const isScrollingUp = e.touches[0].pageY > this.lastY;
-  
-  // If trying to pull down at the top, let the browser handle it (Refresh)
-  if (this.allowUp && isScrollingUp) {
-    return; 
-  }
-  
-  // Otherwise, prevent the "bounce" white space
-  if (isStandalone && !isScrollingUp) {
-    // e.preventDefault(); // Uncomment only if you want to lock bottom-bounce
-  }
+  if (this.allowUp && isScrollingUp) return; 
+  // Note: 'isStandalone' must be defined globally for this line to work here
 }, { passive: false });
